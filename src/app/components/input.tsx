@@ -1,6 +1,7 @@
 export function Input({
   label,
   type = "text",
+  name,
   value,
   onChange,
   placeholder,
@@ -9,20 +10,22 @@ export function Input({
   label: string;
   type?: string;
   value: string;
+  name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   required?: boolean;
 }) {
+  const id = `input-${name.replace(/\s+/g, "-").toLowerCase()}`; // Generate a unique ID for the input
   return (
     <div className="flex flex-col gap-2 w-full">
       {label && (
-        <label htmlFor="input" className="text-sm font-medium text-gray-700">
+        <label htmlFor={id} className="text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
       <input
         type={type}
-        id="input"
+        id={id}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
