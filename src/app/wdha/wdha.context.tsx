@@ -3,7 +3,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type FormData = {
-  [key: string]: any;
+  full_time_employee: boolean;
+  country: string;
+  nominee: "myself" | "someone_else";
+  first_name: string;
+  last_name: string;
+  address_line: string;
+  email: string;
+  confirm_certified_hygienist: boolean;
+  graduation_time: 1 | 2 | 3 | 4 | 5;
 };
 
 type FormContextType = {
@@ -15,7 +23,13 @@ type FormContextType = {
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>({
+    full_time_employee: false,
+    country: "",
+    nominee: "myself",
+    first_name: "",
+    last_name: "",
+  });
 
   const FORM_STORAGE_KEY = "wdha_form";
 
