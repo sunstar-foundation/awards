@@ -2,14 +2,17 @@ export function Checkbox({
   label,
   checked,
   onChange,
+  name,
 }: {
   label: string;
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
 }) {
   return (
     <label className="flex gap-2 cursor-pointer">
       <input
+        id={name}
         type="checkbox"
         checked={checked}
         onChange={onChange}

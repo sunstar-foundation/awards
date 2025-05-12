@@ -30,7 +30,7 @@ export function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="block w-full p-2 border border-gray-300 focus:outline-none focus:ring focus:ring-blue-500"
+        className="block w-full p-2 border border-gray-300"
       />
     </div>
   );

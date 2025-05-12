@@ -7,19 +7,27 @@ import { Input } from "../components/input";
 import { Textarea } from "../components/textarea";
 import { Button } from "../components/button";
 import { Container } from "../components/container";
+import { useFormContext } from "./wdha.context";
 
 export default function Home() {
   const [checked, setChecked] = useState(false);
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
   };
+  const { formData, updateField } = useFormContext();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    updateField(name, value);
+    setChecked(e.target.checked);
+  };
   return (
     <Container>
       <H1>World Dental Hygienist Awards Application</H1>
       <Checkbox
+        name="full_time_employee"
         label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
         checked={checked}
-        onChange={handleCheckboxChange}
+        onChange={handleInputChange}
       />
       {checked && <NomineeSection />}
     </Container>
@@ -234,6 +242,8 @@ function NomineeCategorySection() {
         onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
         placeholder?: string;
         required?: boolean;
+        min?: number;
+        max?: number;
       }[];
     };
   } = {
@@ -334,6 +344,8 @@ function NomineeCategorySection() {
           name: "career_goals",
           placeholder: "e.g. become a dental hygienist educator",
           label: "Describe their career goals.",
+          min: 150,
+          max: 300,
         },
       ],
     },
@@ -381,6 +393,8 @@ function NomineeCategorySection() {
                     name={field.name}
                     placeholder={field.placeholder}
                     rows={4}
+                    min={field.min}
+                    max={field.max}
                   />
                 );
               } else {
