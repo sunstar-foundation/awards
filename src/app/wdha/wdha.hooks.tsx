@@ -2,25 +2,27 @@
 
 import { useFormContext } from "./wdha.context";
 
-export function useFormField<T>(field: string) {
+export function useFormFieldActions<T>() {
   const { formData, updateField } = useFormContext();
 
-  const value = formData[field] || "";
+  const isDisabled =
+    formData.nominee?.value === "" ||
+    !formData.nominee ||
+    !formData.country ||
+    !formData.graduation ||
+    !formData.category ||
+    !formData.referal ||
+    !formData.firstName ||
+    !formData.lastName ||
+    !formData.addressLine ||
+    !formData.email ||
+    !formData.howDidTheNomineeAssistedIndividualLives ||
+    !formData.howDidTheNomineeMadePositiveImpact ||
+    !formData.whatHasBeenTheNomineeGreatestAchievement ||
+    !formData.whatIsTheNomineeMostProudOf ||
+    (formData.country?.edhf && formData.isNotFullTimeDentalEmployee);
 
-  const setValue = (newValue: T) => {
-    updateField(field, newValue);
+  return {
+    isDisabled,
   };
-
-  return [value, setValue] as const;
-}
-export function useFormFieldNumber(field: string) {
-  const { formData, updateField } = useFormContext();
-
-  const value = formData[field] || 0;
-
-  const setValue = (newValue: number) => {
-    updateField(field, newValue);
-  };
-
-  return [value, setValue] as const;
 }

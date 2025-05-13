@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Checkbox } from "../components/checkbox";
 import { DropdownList } from "../components/dropdown-list";
 import { RadioGroup } from "../components/radio";
-import { Input } from "../components/input";
+import { Input, Label } from "../components/input";
 import { Textarea } from "../components/textarea";
 import { Button } from "../components/button";
 import { Container } from "../components/container";
@@ -15,23 +15,104 @@ import {
   nomineeOptions,
   refereeOptions,
 } from "./data";
+import { H1 } from "../components/typography";
 
 export default function Home() {
-  const { formData, updateField } = useFormContext();
+  const { formData, updateField, steps } = useFormContext();
 
   return (
     <Container>
       <H1>World Dental Hygienist Awards Application</H1>
-      <Checkbox
-        name="full_time_employee"
-        label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
-        checked={formData.isNotFullTimeDentalEmployee}
-        onChange={(e) =>
-          updateField("isNotFullTimeDentalEmployee", e.target.checked)
-        }
-      />
-      {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+      {steps === 0 && (
+        <>
+          <Checkbox
+            name="full_time_employee"
+            label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
+            checked={formData.isNotFullTimeDentalEmployee}
+            onChange={(e) =>
+              updateField("isNotFullTimeDentalEmployee", e.target.checked)
+            }
+          />
+          {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+        </>
+      )}
+      {steps === 1 && <SummarySection />}
     </Container>
+  );
+}
+
+function SummarySection() {
+  const { formData, updateField, setSteps } = useFormContext();
+
+  return (
+    <>
+      <p className="text-xl text-bluecolor">
+        Please review and ensure the below information is correct before ticking
+        the privacy policy box and sending the application.
+      </p>
+      <section className="flex flex-col gap-2">
+        <Label label="Country of residence" />
+        <p className="text-pretty text-lg">{formData.country?.label}</p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label
+          label={
+            formData.nominee.value === "0"
+              ? "Your Information"
+              : "Your colleague information"
+          }
+        />
+        <p className="text-pretty text-lg">
+          {formData.firstName} {formData.lastName}
+          <br></br>
+          {formData.addressLine}
+          <br></br>
+          {formData.email}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How long ago did the nominee graduate from hygiene school" />
+        <p className="text-pretty text-lg">{formData.graduation?.label}</p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How did you hear about this award program" />
+        <p className="text-pretty text-lg">{formData.referal?.label}</p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="For which category do you want to nominate yourself or your colleague" />
+        <p className="text-pretty text-lg">{formData.category?.label}</p>
+      </section>
+      <p className="opacity-50">
+        By clicking on the 'Send' button, you consent that Sunstar collects and
+        stores the data provided in this form. For more information about our
+        privacy policy, please visit the following privacy page.
+      </p>
+      <Checkbox
+        name="privacy_policy"
+        label="I have read and understood the privacy policy"
+        checked={formData.acceptedPrivacyPolicy}
+        onChange={(e) => updateField("acceptedPrivacyPolicy", e.target.checked)}
+      />
+      <section>
+        <Button
+          onClick={() => setSteps(0)}
+          className="bg-lightgray text-pretty hover:bg-gray-200"
+        >
+          Edit
+        </Button>
+        <Button
+          onClick={() => {
+            if (formData.acceptedPrivacyPolicy) {
+              alert("Application submitted successfully!");
+            } else {
+              alert("Please accept the privacy policy to proceed.");
+            }
+          }}
+        >
+          Send
+        </Button>
+      </section>
+    </>
   );
 }
 
@@ -42,6 +123,7 @@ function CountrySection() {
     <>
       <DropdownList
         label="Please select the country of residence for your nomination"
+        required={true}
         onChange={(e) => {
           const selectedOption = countries.find(
             (option) => option.value === e.target.value
@@ -93,16 +175,8 @@ function CountrySection() {
   );
 }
 
-const H1 = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <h1 className="text-4xl sm:text-[42px] font-regular tracking-[-.01em] text-center sm:text-left text-primary">
-      {children}
-    </h1>
-  );
-};
-
 function NomineeSection() {
-  const { formData, updateField } = useFormContext();
+  const { formData, updateField, setSteps } = useFormContext();
 
   return (
     <>
@@ -127,7 +201,7 @@ function NomineeSection() {
         value={formData.firstName}
         onChange={(e) => updateField("firstName", e.target.value)}
         type="text"
-        placeholder="Enter first name"
+        placeholder=""
       />
 
       <Input
@@ -147,7 +221,8 @@ function NomineeSection() {
         value={formData.addressLine}
         onChange={(e) => updateField("addressLine", e.target.value)}
         type="text"
-        placeholder="Enter address line 1"
+        placeholder="Ex: Route de Pallatex 11, 1163 Etoy"
+        note="Enter your full address line, including street address, city, and zip code."
       />
       <Input
         label="Email address"
@@ -161,71 +236,71 @@ function NomineeSection() {
 
       <Checkbox
         name="certified_hygienist"
-        label="I confirm that I am a certified Dental Hygienist."
+        label={
+          formData.nominee.value === "0"
+            ? "I confirm that I am a certified Dental Hygienist."
+            : "I confirm that the nominee is a certified Dental Hygienist."
+        }
         checked={formData.isCertifiedHygienist}
         onChange={(e) => updateField("isCertifiedHygienist", e.target.checked)}
       />
-
-      <NomineeSchoolSection />
-      <NomineeReferenceSection />
-      <NomineeCategorySection />
+      {formData.isCertifiedHygienist && (
+        <>
+          <NomineeSchoolSection />
+          <NomineeReferenceSection />
+          <NomineeCategorySection />
+        </>
+      )}
       <Button
         onClick={() => {
-          console.log("Form Data:", formData);
-          // Handle form submission or next step logic here
+          setSteps(1);
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }}
       >
-        Next Step
+        Apply
       </Button>
     </>
   );
 }
 
 function NomineeSchoolSection() {
-  const [selectedSchoolDuration, setSelectedSchoolDuration] = useState(
-    gratuedFromSchoolOptions[0]
-  );
-
-  const handleSchoolDurationChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedOption = gratuedFromSchoolOptions.find(
-      (option) => option.value === e.target.value
-    );
-    if (selectedOption) {
-      setSelectedSchoolDuration(selectedOption);
-    }
-  };
-
+  const { formData, updateField } = useFormContext();
   return (
     <>
       <RadioGroup
-        label="How long ago did the nominee graduate from hygiene school? *"
+        label="How long ago did the nominee graduate from hygiene school?"
+        required={true}
         options={gratuedFromSchoolOptions}
-        selectedValue={selectedSchoolDuration.value}
-        onChange={handleSchoolDurationChange}
+        selectedValue={formData.graduation?.value || ""}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const selectedOption = gratuedFromSchoolOptions.find(
+            (option) => option.value === e.target.value
+          );
+          if (selectedOption) {
+            updateField("graduation", selectedOption);
+          }
+        }}
       />
     </>
   );
 }
 
 function NomineeReferenceSection() {
-  const [selectedReffer, setSelectedReffer] = useState(refereeOptions[0]);
-  const handleRefferChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedOption = refereeOptions.find(
-      (option) => option.value === e.target.value
-    );
-    if (selectedOption) {
-      setSelectedReffer(selectedOption);
-    }
-  };
+  const { formData, updateField } = useFormContext();
   return (
     <>
       <RadioGroup
         label="How did you hear about this award program?"
         options={refereeOptions}
-        selectedValue={selectedReffer.value}
-        onChange={handleRefferChange}
+        selectedValue={formData.referal?.value || ""}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const selectedOption = refereeOptions.find(
+            (option) => option.value === e.target.value
+          );
+          if (selectedOption) {
+            updateField("referal", selectedOption);
+          }
+        }}
       />
     </>
   );
@@ -237,7 +312,8 @@ function NomineeCategorySection() {
   return (
     <>
       <RadioGroup
-        label="Nominee category *"
+        label="Nominee category"
+        required={true}
         options={nomineeCategories}
         selectedValue={formData.category?.value || ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,3 +1,5 @@
+import { Label } from "./input";
+
 export function Textarea({
   label,
   name,
@@ -25,9 +27,7 @@ export function Textarea({
   const adjustedRows = Math.max(rows, calculatedRows); // Ensure at least the default rows
   return (
     <div className="flex flex-col gap-2 w-full items-start">
-      <label className="block text-sm font-medium text-gray-700" htmlFor={id}>
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      <Label label={label} required={required} />
       <div className="flex flex-col gap-2 w-full items-start">
         <textarea
           className="border border-transparent bg-lightgray focus:bg-white focus:border-gray-300 py-2 px-3 w-full resize-none"

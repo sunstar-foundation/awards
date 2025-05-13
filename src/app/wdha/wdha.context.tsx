@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { nomineeCategories } from "./data";
 
 type nomineeType = {
   value: string;
@@ -32,7 +33,7 @@ type categoryType = {
 type FormData = {
   isNotFullTimeDentalEmployee: boolean;
   country: countryType | null;
-  nominee: nomineeType | null;
+  nominee: nomineeType;
   firstName: string;
   lastName: string;
   addressLine: string;
@@ -45,10 +46,13 @@ type FormData = {
   howDidTheNomineeMadePositiveImpact: string;
   whatHasBeenTheNomineeGreatestAchievement: string;
   whatIsTheNomineeMostProudOf: string;
+  acceptedPrivacyPolicy: boolean;
 };
 
 type FormContextType = {
   formData: FormData;
+  steps: number;
+  setSteps: (steps: number) => void;
   updateField: (field: string, value: any) => void;
   resetForm: () => void;
 };
@@ -63,19 +67,20 @@ const defaultFormData = {
   email: "",
   isCertifiedHygienist: false,
   graduation: { value: 0, label: "" },
-  referal: { value: "", label: "" },
-  category: { value: "", label: "", description: "" },
+  referal: nomineeCategories[0],
+  category: null,
   howDidTheNomineeAssistedIndividualLives: "",
   howDidTheNomineeMadePositiveImpact: "",
   whatHasBeenTheNomineeGreatestAchievement: "",
   whatIsTheNomineeMostProudOf: "",
+  acceptedPrivacyPolicy: false,
 };
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   const [formData, setFormData] = useState<FormData>(defaultFormData);
-
+  const [steps, setSteps] = useState(0);
   const FORM_STORAGE_KEY = "wdha_form";
 
   // Load from localStorage on mount
@@ -104,7 +109,9 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <FormContext.Provider value={{ formData, updateField, resetForm }}>
+    <FormContext.Provider
+      value={{ formData, updateField, resetForm, steps, setSteps }}
+    >
       {children}
     </FormContext.Provider>
   );
