@@ -2,16 +2,49 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
+type nomineeType = {
+  value: string;
+  label: string;
+};
+
+type countryType = {
+  value: string;
+  label: string;
+  edhf: boolean;
+};
+
+type graduationType = {
+  value: number;
+  label: string;
+};
+
+type referalType = {
+  value: string;
+  label: string;
+};
+
+type categoryType = {
+  value: string;
+  label: string;
+  description: string;
+};
+
 type FormData = {
-  full_time_employee: boolean;
-  country: string;
-  nominee: "myself" | "someone_else";
-  first_name: string;
-  last_name: string;
-  address_line: string;
+  isNotFullTimeDentalEmployee: boolean;
+  country: countryType | null;
+  nominee: nomineeType | null;
+  firstName: string;
+  lastName: string;
+  addressLine: string;
   email: string;
-  confirm_certified_hygienist: boolean;
-  graduation_time: 1 | 2 | 3 | 4 | 5;
+  isCertifiedHygienist: boolean;
+  graduation: graduationType | null;
+  referal: referalType | null;
+  category: categoryType | null;
+  howDidTheNomineeAssistedIndividualLives: string;
+  howDidTheNomineeMadePositiveImpact: string;
+  whatHasBeenTheNomineeGreatestAchievement: string;
+  whatIsTheNomineeMostProudOf: string;
 };
 
 type FormContextType = {
@@ -20,16 +53,28 @@ type FormContextType = {
   resetForm: () => void;
 };
 
+const defaultFormData = {
+  isNotFullTimeDentalEmployee: false,
+  country: null,
+  nominee: { value: "", label: "" },
+  firstName: "",
+  lastName: "",
+  addressLine: "",
+  email: "",
+  isCertifiedHygienist: false,
+  graduation: { value: 0, label: "" },
+  referal: { value: "", label: "" },
+  category: { value: "", label: "", description: "" },
+  howDidTheNomineeAssistedIndividualLives: "",
+  howDidTheNomineeMadePositiveImpact: "",
+  whatHasBeenTheNomineeGreatestAchievement: "",
+  whatIsTheNomineeMostProudOf: "",
+};
+
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
-  const [formData, setFormData] = useState<FormData>({
-    full_time_employee: false,
-    country: "",
-    nominee: "myself",
-    first_name: "",
-    last_name: "",
-  });
+  const [formData, setFormData] = useState<FormData>(defaultFormData);
 
   const FORM_STORAGE_KEY = "wdha_form";
 
@@ -54,7 +99,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const resetForm = () => {
-    setFormData({});
+    setFormData(defaultFormData);
     localStorage.removeItem(FORM_STORAGE_KEY);
   };
 

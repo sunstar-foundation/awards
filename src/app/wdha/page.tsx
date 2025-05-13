@@ -8,29 +8,88 @@ import { Textarea } from "../components/textarea";
 import { Button } from "../components/button";
 import { Container } from "../components/container";
 import { useFormContext } from "./wdha.context";
+import {
+  countries,
+  gratuedFromSchoolOptions,
+  nomineeCategories,
+  nomineeOptions,
+  refereeOptions,
+} from "./data";
 
 export default function Home() {
-  const [checked, setChecked] = useState(false);
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
-  };
   const { formData, updateField } = useFormContext();
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    updateField(name, value);
-    setChecked(e.target.checked);
-  };
+
   return (
     <Container>
       <H1>World Dental Hygienist Awards Application</H1>
       <Checkbox
         name="full_time_employee"
         label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
-        checked={checked}
-        onChange={handleInputChange}
+        checked={formData.isNotFullTimeDentalEmployee}
+        onChange={(e) =>
+          updateField("isNotFullTimeDentalEmployee", e.target.checked)
+        }
       />
-      {checked && <NomineeSection />}
+      {formData.isNotFullTimeDentalEmployee && <CountrySection />}
     </Container>
+  );
+}
+
+function CountrySection() {
+  const { formData, updateField } = useFormContext();
+
+  return (
+    <>
+      <DropdownList
+        label="Please select the country of residence for your nomination"
+        onChange={(e) => {
+          const selectedOption = countries.find(
+            (option) => option.value === e.target.value
+          );
+          if (selectedOption) {
+            updateField("country", selectedOption);
+          }
+        }}
+        value={formData.country?.value || countries[0].value}
+        options={countries}
+      />
+      {formData.country?.value === "" || !formData.country ? null : formData
+          .country.edhf === true ? (
+        <div className="flex flex-col gap-4 w-full">
+          <p>
+            You cannot nominate directly for the SUNSTAR World Dental Hygienist
+            Awards when your are from <b>{formData.country.label}</b>. Instead,
+            please particpate first in your regional SUNSTAR Award of
+            Distinction by following the appropriate link:
+          </p>
+          <section>
+            <h2 className="font-bold">North America</h2>
+            <a
+              href="https://endeavor.swoogo.com/awardofdistinction"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bluecolor underline"
+            >
+              SUNSTAR Award of Distinction - North America
+            </a>
+          </section>
+          <section>
+            <h2 className="font-bold">Europe</h2>
+
+            <a
+              href="https://awards.sunstar-foundation.org/award-of-distinction"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bluecolor underline"
+            >
+              SUNSTAR Award of Distinction - Europe
+            </a>
+          </section>
+        </div>
+      ) : (
+        <NomineeSection />
+      )}
+    </>
   );
 }
 
@@ -43,55 +102,30 @@ const H1 = ({ children }: { children: React.ReactNode }) => {
 };
 
 function NomineeSection() {
-  const nomineeOptions = [
-    { value: "0", label: "Myself" },
-    { value: "1", label: "A colleague" },
-  ];
-  const [selectedValue, setSelectedValue] = useState(nomineeOptions[0]);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [addressLine, setAddressLine] = useState("");
-  const [email, setEmail] = useState("");
-
-  const [checked, setChecked] = useState(false);
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
-  };
-
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedOption = nomineeOptions.find(
-      (option) => option.value === e.target.value
-    );
-    if (selectedOption) {
-      setSelectedValue(selectedOption);
-    }
-  };
+  const { formData, updateField } = useFormContext();
 
   return (
     <>
-      <DropdownList
-        label="Please select the country of residence for your nomination"
-        onChange={() => {}}
-        options={[
-          { value: "us", label: "United States" },
-          { value: "ca", label: "Canada" },
-          { value: "uk", label: "United Kingdom" },
-          { value: "au", label: "Australia" },
-        ]}
-      />
       <RadioGroup
         label="Are you nominating yourself or a colleague?"
         options={nomineeOptions}
-        selectedValue={selectedValue.value}
-        onChange={handleRadioChange}
+        selectedValue={formData.nominee.value}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const selectedOption = nomineeOptions.find(
+            (option) => option.value === e.target.value
+          );
+          if (selectedOption) {
+            updateField("nominee", selectedOption);
+          }
+        }}
       />
 
       <Input
         label="First name *"
         name="firstName"
         required={true}
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
+        value={formData.firstName}
+        onChange={(e) => updateField("firstName", e.target.value)}
         type="text"
         placeholder="Enter first name"
       />
@@ -100,8 +134,8 @@ function NomineeSection() {
         label="Last name *"
         name="lastName"
         required={true}
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
+        value={formData.lastName}
+        onChange={(e) => updateField("lastName", e.target.value)}
         type="text"
         placeholder="Enter last name"
       />
@@ -110,8 +144,8 @@ function NomineeSection() {
         label="Address line *"
         name="addressLine"
         required={true}
-        value={addressLine}
-        onChange={(e) => setAddressLine(e.target.value)}
+        value={formData.addressLine}
+        onChange={(e) => updateField("addressLine", e.target.value)}
         type="text"
         placeholder="Enter address line 1"
       />
@@ -120,15 +154,16 @@ function NomineeSection() {
         name="email"
         required={true}
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={formData.email}
+        onChange={(e) => updateField("email", e.target.value)}
         placeholder="Enter email address"
       />
 
       <Checkbox
+        name="certified_hygienist"
         label="I confirm that I am a certified Dental Hygienist."
-        checked={checked}
-        onChange={handleCheckboxChange}
+        checked={formData.isCertifiedHygienist}
+        onChange={(e) => updateField("isCertifiedHygienist", e.target.checked)}
       />
 
       <NomineeSchoolSection />
@@ -140,14 +175,6 @@ function NomineeSection() {
 }
 
 function NomineeSchoolSection() {
-  const gratuedFromSchoolOptions = [
-    { value: "0", label: "Less than 5 years" },
-    { value: "1", label: "5-10 years" },
-    { value: "2", label: "10-15 years" },
-    { value: "3", label: "15-25 years" },
-    { value: "4", label: "Over 25 years" },
-  ];
-
   const [selectedSchoolDuration, setSelectedSchoolDuration] = useState(
     gratuedFromSchoolOptions[0]
   );
@@ -176,18 +203,9 @@ function NomineeSchoolSection() {
 }
 
 function NomineeReferenceSection() {
-  const refferOptions = [
-    { value: "0", label: "IFDH website" },
-    { value: "1", label: "IFDH social media" },
-    { value: "2", label: "SUNSTAR/SUNSTAR Foundation website" },
-    { value: "3", label: "SUNSTAR/SUNSTAR Foundation social media" },
-    { value: "4", label: "Colleagues" },
-    { value: "5", label: "Other" },
-  ];
-
-  const [selectedReffer, setSelectedReffer] = useState(refferOptions[0]);
+  const [selectedReffer, setSelectedReffer] = useState(refereeOptions[0]);
   const handleRefferChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedOption = refferOptions.find(
+    const selectedOption = refereeOptions.find(
       (option) => option.value === e.target.value
     );
     if (selectedOption) {
@@ -198,7 +216,7 @@ function NomineeReferenceSection() {
     <>
       <RadioGroup
         label="How did you hear about this award program?"
-        options={refferOptions}
+        options={refereeOptions}
         selectedValue={selectedReffer.value}
         onChange={handleRefferChange}
       />
@@ -207,213 +225,79 @@ function NomineeReferenceSection() {
 }
 
 function NomineeCategorySection() {
-  const nomineeCategories = [
-    { value: "public_health", label: "Public Health" },
-    { value: "full_time_clinician", label: "Full Time Clinician" },
-    { value: "academia", label: "Academia" },
-    { value: "entrepreneur", label: "Entrepreneur" },
-    { value: "new_rdh", label: "New RDH" },
-    { value: "research", label: "Research" },
-  ];
-  const [selectedNomineeCategory, setSelectedNomineeCategory] = useState(
-    nomineeCategories[0]
-  );
-
-  const handleNomineeCategoryChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedOption = nomineeCategories.find(
-      (option) => option.value === e.target.value
-    );
-    if (selectedOption) {
-      setSelectedNomineeCategory(selectedOption);
-    }
-  };
-
-  const categoryQuestionMap: {
-    [key: string]: {
-      label: string;
-      fields: {
-        id: string;
-        type: "text" | "textarea" | "number";
-        label: string;
-        name: string;
-        value?: string;
-        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-        placeholder?: string;
-        required?: boolean;
-        min?: number;
-        max?: number;
-      }[];
-    };
-  } = {
-    public_health: {
-      label: "Public Health",
-      fields: [
-        {
-          id: "impact_description",
-          type: "textarea",
-          label: "How has the nominee improved public dental health?",
-          onChange: () => {},
-          name: "impact_description",
-          required: true,
-        },
-        {
-          id: "program_name",
-          type: "text",
-          name: "program_name",
-          label: "Name of the community program",
-          placeholder: "e.g. SmileBright Initiative",
-        },
-      ],
-    },
-    full_time_clinician: {
-      label: "Full Time Clinician",
-      fields: [
-        {
-          id: "hours_worked",
-          type: "number",
-          name: "hours_worked",
-          placeholder: "e.g. 40",
-          label: "How many hours per week do they work?",
-          required: true,
-        },
-        {
-          id: "patient_types",
-          name: "patient_types",
-          placeholder: "e.g. children, elderly, etc.",
-          type: "textarea",
-          label: "Describe the patient types they care for.",
-        },
-      ],
-    },
-    academia: {
-      label: "Academia",
-      fields: [
-        {
-          id: "teaching_impact",
-          type: "textarea",
-          name: "teaching_impact",
-          placeholder: "e.g. 5 years",
-          label: "How has the nominee impacted students?",
-          required: true,
-        },
-        {
-          id: "research_contribution",
-          type: "textarea",
-          name: "research_contribution",
-          placeholder: "e.g. 10 publications",
-          label: "Describe their research contributions.",
-        },
-      ],
-    },
-    entrepreneur: {
-      label: "Entrepreneur",
-      fields: [
-        {
-          id: "business_description",
-          type: "textarea",
-          name: "business_description",
-          placeholder: "e.g. dental startup",
-          label: "Describe the nominee's business.",
-          required: true,
-        },
-        {
-          id: "innovation_impact",
-          type: "textarea",
-          name: "innovation_impact",
-          placeholder: "e.g. 3 patents",
-          label: "How has their innovation impacted the field?",
-        },
-      ],
-    },
-    new_rdh: {
-      label: "New RDH",
-      fields: [
-        {
-          id: "first_year_practice",
-          type: "number",
-          name: "first_year_practice",
-          placeholder: "e.g. 2023",
-          label: "How many years have they been practicing?",
-          required: true,
-        },
-        {
-          id: "career_goals",
-          type: "textarea",
-          name: "career_goals",
-          placeholder: "e.g. become a dental hygienist educator",
-          label: "Describe their career goals.",
-          min: 150,
-          max: 300,
-        },
-      ],
-    },
-    research: {
-      label: "Research",
-      fields: [
-        {
-          id: "research_topic",
-          type: "text",
-          name: "research_topic",
-          placeholder: "e.g. oral health and systemic diseases",
-          label: "What is the nominee's research topic?",
-          required: true,
-        },
-        {
-          id: "research_impact",
-          type: "textarea",
-          name: "research_impact",
-          placeholder: "e.g. 20 publications",
-          label: "How has their research impacted the field?",
-        },
-      ],
-    },
-  };
+  const { formData, updateField } = useFormContext();
 
   return (
     <>
       <RadioGroup
         label="Nominee category *"
         options={nomineeCategories}
-        selectedValue={selectedNomineeCategory.value}
-        onChange={handleNomineeCategoryChange}
+        selectedValue={formData.category?.value || ""}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const selectedOption = nomineeCategories.find(
+            (option) => option.value === e.target.value
+          );
+          if (selectedOption) {
+            updateField("category", selectedOption);
+          }
+        }}
       />
 
-      {selectedNomineeCategory && (
-        <div className="flex flex-col gap-4 w-full">
-          {categoryQuestionMap[selectedNomineeCategory.value]?.fields.map(
-            (field) => {
-              if (field.type === "textarea") {
-                return (
-                  <Textarea
-                    label={`${field.label} *`}
-                    value={field.value || ""}
-                    key={field.id}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                    rows={4}
-                    min={field.min}
-                    max={field.max}
-                  />
-                );
-              } else {
-                return (
-                  <Input
-                    label={`${field.label} *`}
-                    value={field.value || ""}
-                    key={field.id}
-                    name={field.name}
-                    type={field.type}
-                    required={field.required}
-                    placeholder={field.placeholder}
-                  />
-                );
-              }
-            }
-          )}
-        </div>
-      )}
+      {formData.category !== null && <NomineeCategorySectionSelected />}
+    </>
+  );
+}
+
+function NomineeCategorySectionSelected() {
+  const { formData, updateField } = useFormContext();
+
+  return (
+    <>
+      <Textarea
+        label="How has the nominee assisted individual lives in the chosen category?"
+        name="howDidTheNomineeAssistedIndividualLives"
+        required={true}
+        value={formData.howDidTheNomineeAssistedIndividualLives || ""}
+        min={150}
+        max={350}
+        onChange={(value) =>
+          updateField("howDidTheNomineeAssistedIndividualLives", value)
+        }
+      />
+
+      <Textarea
+        label="How has the nominee made a positive impact in the chosen category?"
+        name="howDidTheNomineeMadePositiveImpact"
+        required={true}
+        value={formData.howDidTheNomineeMadePositiveImpact || ""}
+        min={150}
+        max={350}
+        onChange={(value) =>
+          updateField("howDidTheNomineeMadePositiveImpact", value)
+        }
+      />
+
+      <Textarea
+        label="What has been the nominee's greatest achievement in the chosen category?"
+        name="whatHasBeenTheNomineeGreatestAchievement"
+        required={true}
+        value={formData.whatHasBeenTheNomineeGreatestAchievement || ""}
+        min={150}
+        max={350}
+        onChange={(value) =>
+          updateField("whatHasBeenTheNomineeGreatestAchievement", value)
+        }
+      />
+
+      <Textarea
+        label="What is the nominee most proud of in the chosen category?"
+        name="whatIsTheNomineeMostProudOf"
+        required={true}
+        value={formData.whatIsTheNomineeMostProudOf || ""}
+        min={150}
+        max={350}
+        onChange={(value) => updateField("whatIsTheNomineeMostProudOf", value)}
+      />
     </>
   );
 }

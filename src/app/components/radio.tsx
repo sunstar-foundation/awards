@@ -6,7 +6,7 @@ export function RadioGroup({
 }: {
   label: string;
   options: { value: string; label: string }[];
-  selectedValue: string;
+  selectedValue: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (

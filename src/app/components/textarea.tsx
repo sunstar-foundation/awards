@@ -7,6 +7,7 @@ export function Textarea({
   rows = 4,
   min = 0,
   max = 1000,
+  required = false,
 }: {
   label: string;
   name: string;
@@ -16,22 +17,26 @@ export function Textarea({
   rows?: number;
   min?: number;
   max?: number;
+  required?: boolean;
 }) {
-  const id = `textarea-${name.replace(/\s+/g, "-").toLowerCase()}`; // Generate a unique ID for the textarea
+  const id = `textarea-${name.replace(/\s+/g, "-").toLowerCase()}`;
+  //calc rows based on min and max
+  const calculatedRows = Math.ceil((max - min) / 30); // Assuming 10 characters per row
+  const adjustedRows = Math.max(rows, calculatedRows); // Ensure at least the default rows
   return (
     <div className="flex flex-col gap-2 w-full items-start">
       <label className="block text-sm font-medium text-gray-700" htmlFor={id}>
-        {label}
+        {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="flex flex-col gap-2 w-full items-start">
         <textarea
-          className="border border-gray-300 p-2 w-full"
+          className="border border-gray-300 py-2 px-3 w-full resize-none"
           value={value}
           id={id}
           name={name}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          rows={rows}
+          rows={adjustedRows}
           minLength={min}
           maxLength={max}
         />
