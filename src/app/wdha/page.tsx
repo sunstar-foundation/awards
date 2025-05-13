@@ -109,7 +109,7 @@ function NomineeSection() {
       <RadioGroup
         label="Are you nominating yourself or a colleague?"
         options={nomineeOptions}
-        selectedValue={formData.nominee.value}
+        selectedValue={formData.nominee ? formData.nominee.value : ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const selectedOption = nomineeOptions.find(
             (option) => option.value === e.target.value
@@ -121,7 +121,7 @@ function NomineeSection() {
       />
 
       <Input
-        label="First name *"
+        label="First name"
         name="firstName"
         required={true}
         value={formData.firstName}
@@ -131,7 +131,7 @@ function NomineeSection() {
       />
 
       <Input
-        label="Last name *"
+        label="Last name"
         name="lastName"
         required={true}
         value={formData.lastName}
@@ -141,7 +141,7 @@ function NomineeSection() {
       />
 
       <Input
-        label="Address line *"
+        label="Address line"
         name="addressLine"
         required={true}
         value={formData.addressLine}
@@ -150,7 +150,7 @@ function NomineeSection() {
         placeholder="Enter address line 1"
       />
       <Input
-        label="Email address *"
+        label="Email address"
         name="email"
         required={true}
         type="email"
@@ -169,7 +169,14 @@ function NomineeSection() {
       <NomineeSchoolSection />
       <NomineeReferenceSection />
       <NomineeCategorySection />
-      <Button>Next Step</Button>
+      <Button
+        onClick={() => {
+          console.log("Form Data:", formData);
+          // Handle form submission or next step logic here
+        }}
+      >
+        Next Step
+      </Button>
     </>
   );
 }

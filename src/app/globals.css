@@ -2,6 +2,7 @@
 
 :root {
   --background: #ffffff;
+  --lightgray: #f0f5f7;
   --foreground: #171717;
   --primary: #005876;
   --bluecolor: #007cad;
@@ -12,6 +13,7 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-bluecolor: var(--bluecolor);
+  --color-lightgray: var(--lightgray);
 
   --font-sans: var(--font-noto-sans);
   --font-mono: var(--font-noto-sans-mono);

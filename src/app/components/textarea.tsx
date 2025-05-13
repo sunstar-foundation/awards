@@ -30,7 +30,7 @@ export function Textarea({
       </label>
       <div className="flex flex-col gap-2 w-full items-start">
         <textarea
-          className="border border-gray-300 py-2 px-3 w-full resize-none"
+          className="border border-transparent bg-lightgray focus:bg-white focus:border-gray-300 py-2 px-3 w-full resize-none"
           value={value}
           id={id}
           name={name}

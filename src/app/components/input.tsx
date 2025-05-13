@@ -30,7 +30,7 @@ export function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="block w-full py-2 px-3 border border-gray-300"
+        className="block w-full py-2 px-3 border border-transparent bg-lightgray focus:bg-white focus:border-gray-300"
       />
     </div>
   );
