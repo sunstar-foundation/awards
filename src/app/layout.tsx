@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Noto_Sans_Mono } from "next/font/google";
 import "./globals.css";
-import { FormProvider } from "./wdha/wdha.context";
+import { FormProvider } from "./world-dental-hygienist-awards/wdha.context";
+import { FormProviderEDHF } from "./gum-edhf-award-of-distinction/edhf.context";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${notoSans.variable} ${notoSansMono.variable} antialiased`}
       >
-        <FormProvider>{children}</FormProvider>
+        <FormProviderEDHF>
+          <FormProvider>{children}</FormProvider>
+        </FormProviderEDHF>
       </body>
     </html>
   );

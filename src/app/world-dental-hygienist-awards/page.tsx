@@ -13,8 +13,8 @@ import {
   gratuedFromSchoolOptions,
   nomineeCategories,
   nomineeOptions,
-  refereeOptions,
-} from "./data";
+  refereeOptionsWDHA,
+} from "@/data/data";
 import { H1 } from "../components/typography";
 import { useFormFieldActions } from "./wdha.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
@@ -39,7 +39,7 @@ export default function Home() {
         </>
       )}
       {steps === 1 && <SummarySection />}
-      {steps === 2 && <LastStepSection />} 
+      {steps === 2 && <LastStepSection />}
     </Container>
   );
 }
@@ -198,7 +198,7 @@ function CountrySection() {
             <h2 className="font-bold">Europe</h2>
 
             <a
-              href="https://awards.sunstar-foundation.org/award-of-distinction"
+              href={`${process.env.NEXT_PUBLIC_DOMAIN}/gum-edhf-award-of-distinction`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-bluecolor underline"
@@ -332,10 +332,10 @@ function NomineeReferenceSection() {
     <>
       <RadioGroup
         label="How did you hear about this award program?"
-        options={refereeOptions}
+        options={refereeOptionsWDHA}
         selectedValue={formData.referal?.value || ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const selectedOption = refereeOptions.find(
+          const selectedOption = refereeOptionsWDHA.find(
             (option) => option.value === e.target.value
           );
           if (selectedOption) {

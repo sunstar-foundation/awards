@@ -11,7 +11,16 @@ export const gratuedFromSchoolOptions = [
   { value: "4", label: "Over 25 years" },
 ];
 
-export const refereeOptions = [
+export const refereeOptionsEDHF = [
+  { value: "0", label: "EDHF website" },
+  { value: "1", label: "EDHF social media" },
+  { value: "2", label: "SUNSTAR/SUNSTAR Foundation website" },
+  { value: "3", label: "SUNSTAR/SUNSTAR Foundation social media" },
+  { value: "4", label: "Colleagues" },
+  { value: "5", label: "Other" },
+];
+
+export const refereeOptionsWDHA = [
   { value: "0", label: "IFDH website" },
   { value: "1", label: "IFDH social media" },
   { value: "2", label: "SUNSTAR/SUNSTAR Foundation website" },
@@ -242,7 +251,7 @@ export const countries = [
   { value: "pr", label: "Puerto Rico", edhf: false },
   { value: "qa", label: "Qatar", edhf: false },
   { value: "ro", label: "Romania", edhf: false },
-  { value: "ru", label: "Russian Federation", edhf: false },
+  { value: "ru", label: "Russian Federation", edhf: true },
   { value: "rw", label: "Rwanda", edhf: false },
   { value: "re", label: "Réunion", edhf: false },
   { value: "bl", label: "Saint Barthélemy", edhf: false },
@@ -287,7 +296,7 @@ export const countries = [
   { value: "sy", label: "Syrian Arab Republic", edhf: false },
   { value: "tw", label: "Taiwan, Province of China", edhf: false },
   { value: "tj", label: "Tajikistan", edhf: false },
-  { value: "tz", label: "Tanzania, United Republic of", edhf: true },
+  { value: "tz", label: "Tanzania, United Republic of", edhf: false },
   { value: "th", label: "Thailand", edhf: false },
   { value: "tl", label: "Timor-Leste", edhf: false },
   { value: "tg", label: "Togo", edhf: false },
@@ -302,8 +311,8 @@ export const countries = [
   { value: "ug", label: "Uganda", edhf: false },
   { value: "ua", label: "Ukraine", edhf: false },
   { value: "ae", label: "United Arab Emirates", edhf: false },
-  { value: "gb", label: "United Kingdom", edhf: false },
-  { value: "us", label: "United States", edhf: false },
+  { value: "gb", label: "United Kingdom", edhf: true },
+  { value: "us", label: "United States", edhf: true },
   { value: "um", label: "United States Minor Outlying Islands", edhf: false },
   { value: "uy", label: "Uruguay", edhf: false },
   { value: "uz", label: "Uzbekistan", edhf: false },

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { nomineeCategories } from "./data";
+import { nomineeCategories } from "../../data/data";
 
 type nomineeType = {
   value: string;
@@ -76,12 +76,16 @@ const defaultFormData = {
   acceptedPrivacyPolicy: false,
 };
 
-const FormContext = createContext<FormContextType | undefined>(undefined);
+const FormContextEDHF = createContext<FormContextType | undefined>(undefined);
 
-export const FormProvider = ({ children }: { children: React.ReactNode }) => {
+export const FormProviderEDHF = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [formData, setFormData] = useState<FormData>(defaultFormData);
   const [steps, setSteps] = useState(0);
-  const FORM_STORAGE_KEY = "wdha_form";
+  const FORM_STORAGE_KEY = "edhf_form";
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -109,16 +113,16 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <FormContext.Provider
+    <FormContextEDHF.Provider
       value={{ formData, updateField, resetForm, steps, setSteps }}
     >
       {children}
-    </FormContext.Provider>
+    </FormContextEDHF.Provider>
   );
 };
 
-export const useFormContext = () => {
-  const context = useContext(FormContext);
+export const useFormContextEDHF = () => {
+  const context = useContext(FormContextEDHF);
   if (!context) {
     throw new Error("useFormContext must be used within a FormProvider");
   }
