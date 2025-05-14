@@ -30,7 +30,7 @@ type categoryType = {
   description: string;
 };
 
-type FormData = {
+export type FormData = {
   isNotFullTimeDentalEmployee: boolean;
   country: countryType | null;
   nominee: nomineeType;

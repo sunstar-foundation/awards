@@ -11,23 +11,26 @@ interface ButtonProps
   variant?: VariantProps<typeof buttonStyles>["variant"];
 }
 
-const buttonStyles = cva("px-4 py-2 min-w-[150px] cursor-pointer border", {
-  variants: {
-    variant: {
-      primary: "bg-bluecolor hover:opacity-90 text-white border-bluecolor",
-      secondary: "bg-white hover:bg-gray-100 text-foreground border-gray-300",
+const buttonStyles = cva(
+  "px-4 py-2 min-w-[150px] cursor-pointer border disabled:pointer-events-none disabled:cursor-default disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        primary: "bg-bluecolor hover:opacity-90 text-white border-bluecolor",
+        secondary: "bg-white hover:bg-gray-100 text-foreground border-gray-300",
+      },
+      size: {
+        small: "text-sm",
+        medium: "text-base",
+        large: "text-lg",
+      },
     },
-    size: {
-      small: "text-sm",
-      medium: "text-base",
-      large: "text-lg",
+    defaultVariants: {
+      variant: "primary",
+      size: "medium",
     },
-  },
-  defaultVariants: {
-    variant: "primary",
-    size: "medium",
-  },
-});
+  }
+);
 
 export function Button({
   children,

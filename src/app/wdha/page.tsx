@@ -16,6 +16,8 @@ import {
   refereeOptions,
 } from "./data";
 import { H1 } from "../components/typography";
+import { useFormFieldActions } from "./wdha.hooks";
+import { useSendEmail } from "@/lib/api/client/send-email.api";
 
 export default function Home() {
   const { formData, updateField, steps } = useFormContext();
@@ -37,12 +39,57 @@ export default function Home() {
         </>
       )}
       {steps === 1 && <SummarySection />}
+      {steps === 2 && (
+        <div className="flex flex-col gap-4 w-full text-center">
+          <p className="text-xl text-bluecolor">
+            Thank you for your application! We will review it and get back to
+            you soon.
+          </p>
+          <Button onClick={() => updateField("steps", 0)} variant="secondary">
+            Back to home
+          </Button>
+        </div>
+      )}
     </Container>
   );
 }
 
+function LastStepSection() {
+  const { formData, updateField } = useFormContext();
+  return (
+    <div className="flex flex-col gap-4 w-full text-center">
+      <p className="text-xl text-bluecolor">
+        Thank you for your application! We will review it and get back to you
+        soon.
+      </p>
+      <Button onClick={() => updateField("steps", 0)} variant="secondary">
+        Back to home
+      </Button>
+    </div>
+  );
+}
+
 function SummarySection() {
-  const { formData, updateField, setSteps } = useFormContext();
+  const { formData, updateField, setSteps, resetForm } = useFormContext();
+  const { sendEmail, pending } = useSendEmail();
+
+  async function handleSendEmail() {
+    if (formData.acceptedPrivacyPolicy) {
+      const { error, message } = await sendEmail({
+        ...formData,
+        type: "WDHA",
+      });
+
+      if (error) {
+        alert("Error sending email. Please try again later.");
+      } else {
+        setSteps(2);
+        resetForm();
+      }
+    } else {
+      alert("Please accept the privacy policy to proceed.");
+    }
+  }
 
   return (
     <>
@@ -82,10 +129,20 @@ function SummarySection() {
         <Label label="For which category do you want to nominate yourself or your colleague" />
         <p className="text-pretty text-lg">{formData.category?.label}</p>
       </section>
-      <p className="opacity-50">
-        By clicking on the 'Send' button, you consent that Sunstar collects and
-        stores the data provided in this form. For more information about our
-        privacy policy, please visit the following privacy page.
+      <p>
+        <span className="opacity-65">
+          By clicking on the 'Send' button, you consent that Sunstar collects
+          and stores the data provided in this form. For more information about
+          our privacy policy, please visit the following
+        </span>{" "}
+        <a
+          href="https://www.sunstar-foundation.org/en/privacy"
+          target="_blank"
+          className="text-bluecolor underline"
+        >
+          privacy page
+        </a>
+        .
       </p>
       <Checkbox
         name="privacy_policy"
@@ -98,13 +155,8 @@ function SummarySection() {
           Edit
         </Button>
         <Button
-          onClick={() => {
-            if (formData.acceptedPrivacyPolicy) {
-              alert("Application submitted successfully!");
-            } else {
-              alert("Please accept the privacy policy to proceed.");
-            }
-          }}
+          onClick={handleSendEmail}
+          disabled={!formData.acceptedPrivacyPolicy}
         >
           Send
         </Button>
@@ -174,6 +226,7 @@ function CountrySection() {
 
 function NomineeSection() {
   const { formData, updateField, setSteps } = useFormContext();
+  const { isDisabled } = useFormFieldActions();
 
   return (
     <>
@@ -249,6 +302,7 @@ function NomineeSection() {
         </>
       )}
       <Button
+        disabled={isDisabled}
         onClick={() => {
           setSteps(1);
           window.scrollTo({ top: 0, behavior: "smooth" });
