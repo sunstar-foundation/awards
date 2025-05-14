@@ -3,7 +3,7 @@
 import { useFormContext } from "./wdha.context";
 import { isValidEmail } from "@/helpers/form-validation";
 
-export function useFormFieldActions<T>() {
+export function useFormFieldActions() {
   const { formData } = useFormContext();
 
   const invalidFirstname =

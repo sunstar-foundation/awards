@@ -39,17 +39,7 @@ export default function Home() {
         </>
       )}
       {steps === 1 && <SummarySection />}
-      {steps === 2 && (
-        <div className="flex flex-col gap-4 w-full text-center">
-          <p className="text-xl text-bluecolor">
-            Thank you for your application! We will review it and get back to
-            you soon.
-          </p>
-          <Button onClick={() => updateField("steps", 0)} variant="secondary">
-            Back to home
-          </Button>
-        </div>
-      )}
+      {steps === 2 && <LastStepSection />} 
     </Container>
   );
 }
