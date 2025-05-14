@@ -93,11 +93,8 @@ function SummarySection() {
         checked={formData.acceptedPrivacyPolicy}
         onChange={(e) => updateField("acceptedPrivacyPolicy", e.target.checked)}
       />
-      <section>
-        <Button
-          onClick={() => setSteps(0)}
-          className="bg-lightgray text-pretty hover:bg-gray-200"
-        >
+      <section className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full">
+        <Button onClick={() => setSteps(0)} variant="secondary">
           Edit
         </Button>
         <Button
