@@ -5,3 +5,22 @@ export function H1({ children }: { children: React.ReactNode }) {
     </h1>
   );
 }
+
+export function Link({
+  children,
+  href,
+}: {
+  children: React.ReactNode;
+  href: string;
+}) {
+  return (
+    <a
+      className="text-bluecolor underline"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+    </a>
+  );
+}

@@ -15,31 +15,39 @@ import {
   nomineeOptions,
   refereeOptionsWDHA,
 } from "@/data/data";
-import { H1 } from "../components/typography";
+import { H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./wdha.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
+import Image from "next/image";
 
 export default function Home() {
   const { formData, updateField, steps } = useFormContext();
 
   return (
     <Container>
-      <H1>World Dental Hygienist Awards Application</H1>
-      {steps === 0 && (
+      {steps === 2 ? (
+        <LastStepSection />
+      ) : (
         <>
-          <Checkbox
-            name="full_time_employee"
-            label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
-            checked={formData.isNotFullTimeDentalEmployee}
-            onChange={(e) =>
-              updateField("isNotFullTimeDentalEmployee", e.target.checked)
-            }
-          />
-          {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+          <H1>World Dental Hygienist Awards Application</H1>
+
+          {steps === 0 && (
+            <>
+              <Checkbox
+                name="full_time_employee"
+                label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
+                checked={formData.isNotFullTimeDentalEmployee}
+                onChange={(e) =>
+                  updateField("isNotFullTimeDentalEmployee", e.target.checked)
+                }
+              />
+              {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+            </>
+          )}
+
+          {steps === 1 && <SummarySection />}
         </>
       )}
-      {steps === 1 && <SummarySection />}
-      {steps === 2 && <LastStepSection />}
     </Container>
   );
 }
@@ -47,14 +55,30 @@ export default function Home() {
 function LastStepSection() {
   const { formData, updateField } = useFormContext();
   return (
-    <div className="flex flex-col gap-4 w-full text-center">
-      <p className="text-xl text-bluecolor">
-        Thank you for your application! We will review it and get back to you
-        soon.
+    <div className="flex flex-col gap-4 w-full items-start">
+      <Image
+        src="/check.svg"
+        alt="Thank you"
+        width={84}
+        height={84}
+        className="mx-auto mb-4"
+      />
+      <H1>Congratulations, your nomination has been sent successfully!</H1>
+      <p>We will get back to you and provide you the next steps.</p>
+      <p>
+        In the meantime please use the following button to upload your 1-minute
+        video.
       </p>
-      <Button onClick={() => updateField("steps", 0)} variant="secondary">
-        Back to home
-      </Button>
+      <p>
+        For some tips and tricks that can really make your video stand out,
+        please go to this page:{" "}
+        <Link href="https://www.sunstar-foundation.org/en/awards/world-hygienist/how-to-apply#recording-a-video-with-your-phone">
+          How to upload a video
+        </Link>
+      </p>
+      <section className="flex flex-col gap-2 mt-4">
+        <Button onClick={() => updateField("steps", 0)}>Upload my video</Button>
+      </section>
     </div>
   );
 }
@@ -199,8 +223,6 @@ function CountrySection() {
 
             <a
               href={`${process.env.NEXT_PUBLIC_DOMAIN}/gum-edhf-award-of-distinction`}
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-bluecolor underline"
             >
               SUNSTAR Award of Distinction - Europe

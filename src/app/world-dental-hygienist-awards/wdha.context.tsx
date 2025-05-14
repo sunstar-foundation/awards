@@ -2,6 +2,7 @@
 
 import { nomineeCategories } from "@/data/data";
 import { createContext, useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type nomineeType = {
   value: string;
@@ -58,6 +59,7 @@ type FormContextType = {
 };
 
 const defaultFormData = {
+  uniqueId: uuidv4(),
   isNotFullTimeDentalEmployee: false,
   country: null,
   nominee: { value: "", label: "" },
@@ -80,7 +82,7 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   const [formData, setFormData] = useState<FormData>(defaultFormData);
-  const [steps, setSteps] = useState(0);
+  const [steps, setSteps] = useState(2);
   const FORM_STORAGE_KEY = "wdha_form";
 
   // Load from localStorage on mount

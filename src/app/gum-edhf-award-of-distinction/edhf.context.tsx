@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { nomineeCategories } from "../../data/data";
 
 type nomineeType = {
@@ -58,6 +59,7 @@ type FormContextType = {
 };
 
 const defaultFormData = {
+  uniqueId: uuidv4(),
   isNotFullTimeDentalEmployee: false,
   country: null,
   nominee: { value: "", label: "" },
