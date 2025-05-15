@@ -1,22 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../components/button";
 import { Checkbox } from "../components/checkbox";
 import { Container } from "../components/container";
 import { H1 } from "../components/typography";
 import { Input } from "../components/input";
 import { isValidLink } from "@/helpers/form-validation";
-import { useSearchParams } from "next/navigation";
 import { useShareVideo } from "@/lib/api/client/share-video.api";
 
 export default function Home() {
-  //use useEffect to get search params
-  const searchParams = useSearchParams();
-  const submissionId = searchParams ? searchParams.get("submissionId") : null;
-  const firstName = searchParams ? searchParams.get("firstName") : null;
-  const lastName = searchParams ? searchParams.get("lastName") : null;
-  const email = searchParams ? searchParams.get("email") : null;
+  const [queryParams, setQueryParams] = useState<URLSearchParams | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setQueryParams(new URLSearchParams(window.location.search));
+    }
+  }, []);
+  const submissionId = queryParams?.get("submissionId") ?? "";
+  const firstName = queryParams?.get("firstName") ?? "";
+  const lastName = queryParams?.get("lastName") ?? "";
+  const email = queryParams?.get("email") ?? "";
 
   const [isChecked, setIsChecked] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
