@@ -11,8 +11,7 @@ export default async function handler(
   try {
     await sendEmail({
       from: process.env.DEFAULT_FROM_EMAIL,
-      //to: ["martijn.verhulst@sunstar.com"],
-      to: ["dejan.eric@sunstar.com", email],
+      to: [email],
       subject: `${type} Nomination Form - ${req.body.firstName} ${req.body.lastName}`,
       html: `
         <h1>${type} Nomination Form</h1>
@@ -36,6 +35,21 @@ export default async function handler(
        
         `,
     });
+
+    //create a link to share the video for the nominee
+    await sendEmail({
+      from: process.env.DEFAULT_FROM_EMAIL,
+      to: [email],
+      subject: `Shared Video Link for your Nomination - ${firstName} ${lastName}`,
+      html: `<h1>Shared Video Link for your Nomination</h1>
+      <p>Hello ${firstName} ${lastName},</p>
+      <p>Thank you for your nomination.</p>
+      <p>We would like to ask you to share a video link with us. This video link will be used for the nomination process.</p>
+              <a href="${process.env.NEXT_PUBLIC_DOMAIN}/share-video?submissionId=${req.body.uniqueId}&firstName=${firstName}&lastName=${lastName}&email=${email}">Click here to share your video</a>
+      
+      `,
+    });
+
     return res
       .status(200)
       .json({ message: "Email sent successfully", error: false });
