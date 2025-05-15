@@ -21,7 +21,9 @@ export async function sendEmail({
     from: `Sunstar Foundation Awards <${from}>`,
     to: to,
     bcc: [
-      "martijn.verhulst@sunstar.com, dejan.eric@sunstar.com, marga.ortiz@sunstar.com",
+      "martijn.verhulst@sunstar.com",
+      "dejan.eric@sunstar.com",
+      "marga.ortiz@sunstar.com",
     ],
     subject: `${subject}`,
     html: html || "Your html didn't work",
