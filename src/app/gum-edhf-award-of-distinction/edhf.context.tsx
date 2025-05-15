@@ -3,52 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { nomineeCategories } from "../../data/data";
-
-type nomineeType = {
-  value: string;
-  label: string;
-};
-
-type countryType = {
-  value: string;
-  label: string;
-  edhf: boolean;
-};
-
-type graduationType = {
-  value: number;
-  label: string;
-};
-
-type referalType = {
-  value: string;
-  label: string;
-};
-
-type categoryType = {
-  value: string;
-  label: string;
-  description: string;
-};
-
-export type FormData = {
-  isNotFullTimeDentalEmployee: boolean;
-  country: countryType | null;
-  nominee: nomineeType;
-  firstName: string;
-  lastName: string;
-  addressLine: string;
-  email: string;
-  isCertifiedHygienist: boolean;
-  graduation: graduationType | null;
-  referal: referalType | null;
-  category: categoryType | null;
-  howDidTheNomineeAssistedIndividualLives: string;
-  howDidTheNomineeMadePositiveImpact: string;
-  whatHasBeenTheNomineeGreatestAchievement: string;
-  whatIsTheNomineeMostProudOf: string;
-  acceptedPrivacyPolicy: boolean;
-};
+import { FormData } from "@/types/types";
 
 type FormContextType = {
   formData: FormData;

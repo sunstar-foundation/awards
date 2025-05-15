@@ -11,17 +11,20 @@ export default async function handler(
   try {
     await sendEmail({
       from: process.env.DEFAULT_FROM_EMAIL,
-      to: ["martijn.verhulst@sunstar.com"],
+      //to: ["martijn.verhulst@sunstar.com"],
+      to: ["dejan.eric@sunstar.com", email],
       subject: `${type} Nomination Form - ${req.body.firstName} ${req.body.lastName}`,
       html: `
         <h1>${type} Nomination Form</h1>
-        <p>Nominee: ${req.body.nominee.value}</p>
+        <p>Submission ID: ${req.body.uniqueId}</p>
+        <p>Is not full time dental employee: ${req.body.isNotFullTimeDentalEmployee === true ? "Yes" : "No"}</p>
+        <p>Nominee: ${req.body.nominee.label}</p>
         <p>Country: ${req.body.country?.label}</p>
         <p>First Name: ${req.body.firstName}</p>
         <p>Last Name: ${req.body.lastName}</p>
         <p>Address Line: ${req.body.addressLine}</p>
         <p>Email: ${req.body.email}</p>
-        <p>Is Certified Hygienist: ${req.body.isCertifiedHygienist}</p>
+        <p>Is Certified Hygienist: ${req.body.isCertifiedHygienist === true ? "Yes" : "No"}</p>
         <p>Graduation: ${req.body.graduation?.label}</p>
         <p>Referal: ${req.body.referal?.label}</p>  
         <p>Category: ${req.body.category?.label}</p>
@@ -29,8 +32,8 @@ export default async function handler(
         <p>How did the nominee made positive impact: ${req.body.howDidTheNomineeMadePositiveImpact}</p>
         <p>What has been the nominee greatest achievement: ${req.body.whatHasBeenTheNomineeGreatestAchievement}</p>
         <p>What is the nominee most proud of: ${req.body.whatIsTheNomineeMostProudOf}</p>
-        <p>Accepted Privacy Policy: ${req.body.acceptedPrivacyPolicy}</p>
-        <p>Is not full time dental employee: ${req.body.isNotFullTimeDentalEmployee}</p>
+        <p>Accepted Privacy Policy: ${req.body.acceptedPrivacyPolicy === true ? "Yes" : "No"}</p>
+       
         `,
     });
     return res

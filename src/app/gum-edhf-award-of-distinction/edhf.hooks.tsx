@@ -42,7 +42,7 @@ export function useFormFieldActions() {
     invalidFirstname ||
     invalidLastname ||
     invalidEmail ||
-    (formData.country?.edhf && formData.isNotFullTimeDentalEmployee);
+    (!formData.country?.edhf && formData.isNotFullTimeDentalEmployee);
 
   return {
     isDisabled,

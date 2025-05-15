@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "../components/checkbox";
 import { DropdownList } from "../components/dropdown-list";
 import { RadioGroup } from "../components/radio";
@@ -15,74 +15,113 @@ import {
   nomineeOptions,
   refereeOptionsEDHF,
 } from "../../data/data";
-import { H1 } from "../components/typography";
+import { ErrorText, H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./edhf.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
+import Image from "next/image";
 
 export default function Home() {
   const { formData, updateField, steps } = useFormContextEDHF();
 
   return (
     <Container>
-      <H1>GUM EDHF Award of Distinction - Application form</H1>
-      {steps === 0 && (
+      {steps === 2 ? (
+        <LastStepSection />
+      ) : (
         <>
-          <Checkbox
-            name="full_time_employee"
-            label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
-            checked={formData.isNotFullTimeDentalEmployee}
-            onChange={(e) =>
-              updateField("isNotFullTimeDentalEmployee", e.target.checked)
-            }
-          />
-          {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+          <H1>GUM EDHF Award of Distinction - Application form</H1>
+          {steps === 0 && (
+            <>
+              <Checkbox
+                name="full_time_employee"
+                label="I am not a full-time employee of a dental products distributor or manufacturer which market products compete with SUNSTAR's product line."
+                checked={formData.isNotFullTimeDentalEmployee}
+                onChange={(e) =>
+                  updateField("isNotFullTimeDentalEmployee", e.target.checked)
+                }
+              />
+              {formData.isNotFullTimeDentalEmployee && <CountrySection />}
+            </>
+          )}
+          {steps === 1 && <SummarySection />}
         </>
       )}
-      {steps === 1 && <SummarySection />}
-      {steps === 2 && <LastStepSection />}
     </Container>
   );
 }
 
 function LastStepSection() {
-  const { formData, updateField } = useFormContextEDHF();
+  const { formData } = useFormContextEDHF();
   return (
-    <div className="flex flex-col gap-4 w-full text-center">
-      <p className="text-xl text-bluecolor">
-        Thank you for your application! We will review it and get back to you
-        soon.
+    <div className="flex flex-col gap-4 w-full items-start">
+      <Image
+        src="/check.svg"
+        alt="Thank you"
+        width={84}
+        height={84}
+        className="mx-auto mb-4"
+      />
+      <H1>Congratulations, your nomination has been sent successfully!</H1>
+      <p>We will get back to you and provide you the next steps.</p>
+      <p>
+        In the meantime please use the following button to upload your 1-minute
+        video.
       </p>
-      <Button onClick={() => updateField("steps", 0)} variant="secondary">
-        Back to home
-      </Button>
+      <p>
+        For some tips and tricks that can really make your video stand out,
+        please go to this page:{" "}
+        <Link href="https://www.sunstar-foundation.org/en/awards/world-hygienist/how-to-apply#recording-a-video-with-your-phone">
+          How to upload a video
+        </Link>
+      </p>
+      <section className="flex flex-col gap-2 mt-4">
+        <Button
+          onClick={
+            //navigate to share video page
+            () => {
+              window.location.href =
+                "/share-video?submissionId=" +
+                formData.uniqueId +
+                "&firstName=" +
+                formData.firstName +
+                "&lastName=" +
+                formData.lastName +
+                "&email=" +
+                formData.email;
+            }
+          }
+        >
+          Upload my video
+        </Button>
+      </section>
     </div>
   );
 }
 
 function SummarySection() {
-  const { formData, updateField, setSteps, resetForm } = useFormContextEDHF();
+  const { formData, updateField, setSteps } = useFormContextEDHF();
   const { sendEmail, pending } = useSendEmail();
-
+  const [error, setError] = useState<string | null>(null);
   async function handleSendEmail() {
     if (formData.acceptedPrivacyPolicy) {
       const { error, message } = await sendEmail({
         ...formData,
-        type: "WDHA",
+        type: "EDHF",
       });
 
       if (error) {
-        alert("Error sending email. Please try again later.");
+        setError(message);
       } else {
         setSteps(2);
-        resetForm();
       }
     } else {
-      alert("Please accept the privacy policy to proceed.");
+      setError("Please accept the privacy policy to proceed.");
     }
   }
 
   return (
     <>
+      {error && <ErrorText>{error}</ErrorText>}
       <p className="text-xl text-bluecolor">
         Please review and ensure the below information is correct before ticking
         the privacy policy box and sending the application.
@@ -125,13 +164,9 @@ function SummarySection() {
           and stores the data provided in this form. For more information about
           our privacy policy, please visit the following
         </span>{" "}
-        <a
-          href="https://www.sunstar-foundation.org/en/privacy"
-          target="_blank"
-          className="text-bluecolor underline"
-        >
+        <Link href="https://www.sunstar-foundation.org/en/privacy">
           privacy page
-        </a>
+        </Link>
         .
       </p>
       <Checkbox
@@ -141,14 +176,18 @@ function SummarySection() {
         onChange={(e) => updateField("acceptedPrivacyPolicy", e.target.checked)}
       />
       <section className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full">
-        <Button onClick={() => setSteps(0)} variant="secondary">
+        <Button
+          onClick={() => setSteps(0)}
+          variant="secondary"
+          disabled={pending}
+        >
           Edit
         </Button>
         <Button
           onClick={handleSendEmail}
-          disabled={!formData.acceptedPrivacyPolicy}
+          disabled={!formData.acceptedPrivacyPolicy || pending}
         >
-          Send
+          {pending ? "Sending..." : "Send"}
         </Button>
       </section>
     </>

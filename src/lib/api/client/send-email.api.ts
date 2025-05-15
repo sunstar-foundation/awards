@@ -1,7 +1,7 @@
 "use client";
 
 import { useApi } from "../utils.api";
-import { FormData } from "@/app/world-dental-hygienist-awards/wdha.context";
+import { FormData } from "@/types/types";
 
 export function useSendEmail() {
   const { post, pending } = useApi();

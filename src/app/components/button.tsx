@@ -12,7 +12,7 @@ interface ButtonProps
 }
 
 const buttonStyles = cva(
-  "px-4 py-2 min-w-[150px] cursor-pointer border disabled:pointer-events-none disabled:cursor-default disabled:opacity-50",
+  "px-5 py-3 min-w-[150px] cursor-pointer border disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 text-lg font-semibold",
   {
     variants: {
       variant: {

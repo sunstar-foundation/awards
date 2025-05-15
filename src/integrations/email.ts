@@ -18,8 +18,11 @@ export async function sendEmail({
 
   const resend = new Resend(`${process.env.RESEND_API_KEY}`);
   await resend.emails.send({
-    from: `Sunstar Foundation Awards - <${from}>`,
+    from: `Sunstar Foundation Awards <${from}>`,
     to: to,
+    bcc: [
+      "martijn.verhulst@sunstar.com, dejan.eric@sunstar.com, marga.ortiz@sunstar.com",
+    ],
     subject: `${subject}`,
     html: html || "Your html didn't work",
   });

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "../components/checkbox";
 import { DropdownList } from "../components/dropdown-list";
 import { RadioGroup } from "../components/radio";
@@ -15,7 +15,7 @@ import {
   nomineeOptions,
   refereeOptionsWDHA,
 } from "@/data/data";
-import { H1, Link } from "../components/typography";
+import { ErrorText, H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./wdha.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
@@ -53,7 +53,7 @@ export default function Home() {
 }
 
 function LastStepSection() {
-  const { formData, updateField } = useFormContext();
+  const { formData } = useFormContext();
   return (
     <div className="flex flex-col gap-4 w-full items-start">
       <Image
@@ -77,16 +77,34 @@ function LastStepSection() {
         </Link>
       </p>
       <section className="flex flex-col gap-2 mt-4">
-        <Button onClick={() => updateField("steps", 0)}>Upload my video</Button>
+        <Button
+          onClick={
+            //navigate to share video page
+            () => {
+              window.location.href =
+                "/share-video?submissionId=" +
+                formData.uniqueId +
+                "&firstName=" +
+                formData.firstName +
+                "&lastName=" +
+                formData.lastName +
+                "&email=" +
+                formData.email;
+            }
+          }
+        >
+          Upload my video
+        </Button>
       </section>
     </div>
   );
 }
 
 function SummarySection() {
-  const { formData, updateField, setSteps, resetForm } = useFormContext();
+  const { formData, updateField, setSteps } = useFormContext();
   const { sendEmail, pending } = useSendEmail();
 
+  const [error, setError] = useState<string | null>(null);
   async function handleSendEmail() {
     if (formData.acceptedPrivacyPolicy) {
       const { error, message } = await sendEmail({
@@ -95,18 +113,18 @@ function SummarySection() {
       });
 
       if (error) {
-        alert("Error sending email. Please try again later.");
+        setError(message);
       } else {
         setSteps(2);
-        resetForm();
       }
     } else {
-      alert("Please accept the privacy policy to proceed.");
+      setError("Please accept the privacy policy to proceed.");
     }
   }
 
   return (
     <>
+      {error && <ErrorText>{error}</ErrorText>}
       <p className="text-xl text-bluecolor">
         Please review and ensure the below information is correct before ticking
         the privacy policy box and sending the application.
@@ -149,13 +167,9 @@ function SummarySection() {
           and stores the data provided in this form. For more information about
           our privacy policy, please visit the following
         </span>{" "}
-        <a
-          href="https://www.sunstar-foundation.org/en/privacy"
-          target="_blank"
-          className="text-bluecolor underline"
-        >
+        <Link href="https://www.sunstar-foundation.org/en/privacy">
           privacy page
-        </a>
+        </Link>
         .
       </p>
       <Checkbox
@@ -165,14 +179,18 @@ function SummarySection() {
         onChange={(e) => updateField("acceptedPrivacyPolicy", e.target.checked)}
       />
       <section className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full">
-        <Button onClick={() => setSteps(0)} variant="secondary">
+        <Button
+          onClick={() => setSteps(0)}
+          variant="secondary"
+          disabled={pending}
+        >
           Edit
         </Button>
         <Button
           onClick={handleSendEmail}
-          disabled={!formData.acceptedPrivacyPolicy}
+          disabled={!formData.acceptedPrivacyPolicy || pending}
         >
-          Send
+          {pending ? "Sending..." : "Send"}
         </Button>
       </section>
     </>

@@ -1,3 +1,5 @@
+import { cn } from "./components.utils";
+
 export function H1({ children }: { children: React.ReactNode }) {
   return (
     <h1 className="text-3xl sm:text-[42px] font-regular tracking-[-.01em] text-left text-primary text-balance sm:text-pretty">
@@ -23,4 +25,14 @@ export function Link({
       {children}
     </a>
   );
+}
+
+export function ErrorText({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return <p className={cn("text-red-500", className)}>{children}</p>;
 }
