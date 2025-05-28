@@ -81,7 +81,6 @@ export default async function handler(
             <p style="word-break:break-all; color: #555;">
               ${process.env.NEXT_PUBLIC_DOMAIN}/share-video?submissionId=${req.body.uniqueId}&firstName=${firstName}&lastName=${lastName}&email=${email}
             </p>
-
             
           </div>
         `,
