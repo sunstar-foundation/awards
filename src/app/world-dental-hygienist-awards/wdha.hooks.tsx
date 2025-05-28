@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "./wdha.context";
-import { isValidEmail } from "@/helpers/form-validation";
+import { countWords, isValidEmail } from "@/helpers/form-validation";
 
 export function useFormFieldActions() {
   const { formData } = useFormContext();
@@ -37,12 +37,37 @@ export function useFormFieldActions() {
     formData.whatIsTheNomineeMostProudOf,
   ];
 
+  const isValidhowDidTheNomineeAssistedIndividualLives = (() => {
+    const count = countWords(formData.howDidTheNomineeAssistedIndividualLives);
+    return count >= 150 && count <= 350;
+  })();
+
+  const isValidhowDidTheNomineeMadePositiveImpact = (() => {
+    const count = countWords(formData.howDidTheNomineeMadePositiveImpact);
+    return count >= 150 && count <= 350;
+  })();
+
+  const isValidwhatHasBeenTheNomineeGreatestAchievement = (() => {
+    const count = countWords(formData.whatHasBeenTheNomineeGreatestAchievement);
+    return count >= 150 && count <= 350;
+  })();
+
+  const isValidwhatIsTheNomineeMostProudOf = (() => {
+    const count = countWords(formData.whatIsTheNomineeMostProudOf);
+    return count >= 150 && count <= 350;
+  })();
+
   const isDisabled =
     requiredFields.some((field) => !field || field === "") ||
     invalidFirstname ||
     invalidLastname ||
     invalidEmail ||
-    (formData.country?.edhf && formData.isNotFullTimeDentalEmployee);
+    (formData.country?.edhf && formData.isNotFullTimeDentalEmployee) ||
+    !formData.agreesForNomineeInformationToBeMarketed ||
+    !isValidhowDidTheNomineeAssistedIndividualLives ||
+    !isValidhowDidTheNomineeMadePositiveImpact ||
+    !isValidwhatHasBeenTheNomineeGreatestAchievement ||
+    !isValidwhatIsTheNomineeMostProudOf;
 
   return {
     isDisabled,

@@ -17,6 +17,7 @@ type FormContextType = {
 const defaultFormData = {
   uniqueId: uuidv4(),
   isNotFullTimeDentalEmployee: false,
+  agreesForNomineeInformationToBeMarketed: false,
   country: null,
   nominee: { value: "", label: "" },
   firstName: "",

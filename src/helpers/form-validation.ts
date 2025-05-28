@@ -17,3 +17,10 @@ export function isValidLink(link: string): boolean {
     return false;
   }
 }
+
+export function countWords(text: string): number {
+  return text
+    .trim() // Remove leading/trailing whitespace
+    .split(/\s+/) // Split on one or more whitespace characters
+    .filter((word) => word.length > 0).length; // Filter out empty strings
+}

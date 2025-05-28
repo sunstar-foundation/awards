@@ -41,6 +41,17 @@ export default function Home() {
                   updateField("isNotFullTimeDentalEmployee", e.target.checked)
                 }
               />
+              <Checkbox
+                name="agrees_for_nominee_information_to_be_marketed"
+                label="I agree for Sunstar affiliates and distributors to use my details for marketing purposes."
+                checked={formData.agreesForNomineeInformationToBeMarketed}
+                onChange={(e) =>
+                  updateField(
+                    "agreesForNomineeInformationToBeMarketed",
+                    e.target.checked
+                  )
+                }
+              />
               {formData.isNotFullTimeDentalEmployee && <CountrySection />}
             </>
           )}
@@ -130,6 +141,12 @@ function SummarySection() {
         the privacy policy box and sending the application.
       </p>
       <section className="flex flex-col gap-2">
+        <Label label="I agree for Sunstar affiliates and distributors to use my details for marketing purposes." />
+        <p className="text-pretty text-lg">
+          {formData.agreesForNomineeInformationToBeMarketed ? "Yes" : "No"}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
         <Label label="Country of residence" />
         <p className="text-pretty text-lg">{formData.country?.label}</p>
       </section>
@@ -160,6 +177,30 @@ function SummarySection() {
       <section className="flex flex-col gap-2">
         <Label label="For which category do you want to nominate yourself or your colleague" />
         <p className="text-pretty text-lg">{formData.category?.label}</p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How has the nominee assisted individual lives in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.howDidTheNomineeAssistedIndividualLives}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How has the nominee made a positive impact in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.howDidTheNomineeMadePositiveImpact}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="What has been the nominee's greatest achievement in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.whatHasBeenTheNomineeGreatestAchievement}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="What is the nominee most proud of in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.whatIsTheNomineeMostProudOf}
+        </p>
       </section>
       <p>
         <span className="opacity-65">

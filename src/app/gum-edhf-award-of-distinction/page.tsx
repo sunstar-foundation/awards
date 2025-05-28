@@ -40,6 +40,17 @@ export default function Home() {
                   updateField("isNotFullTimeDentalEmployee", e.target.checked)
                 }
               />
+              <Checkbox
+                name="agrees_for_nominee_information_to_be_marketed"
+                label="I agree for Sunstar affiliates and distributors to use my details for marketing purposes."
+                checked={formData.agreesForNomineeInformationToBeMarketed}
+                onChange={(e) =>
+                  updateField(
+                    "agreesForNomineeInformationToBeMarketed",
+                    e.target.checked
+                  )
+                }
+              />
               {formData.isNotFullTimeDentalEmployee && <CountrySection />}
             </>
           )}
@@ -63,37 +74,6 @@ function LastStepSection() {
       />
       <H1>Congratulations, your nomination has been sent successfully!</H1>
       <p>We will get back to you and provide you the next steps.</p>
-      <p>
-        In the meantime please use the following button to upload your 1-minute
-        video.
-      </p>
-      <p>
-        For some tips and tricks that can really make your video stand out,
-        please go to this page:{" "}
-        <Link href="https://www.sunstar-foundation.org/en/awards/world-hygienist/how-to-apply#recording-a-video-with-your-phone">
-          How to upload a video
-        </Link>
-      </p>
-      <section className="flex flex-col gap-2 mt-4">
-        <Button
-          onClick={
-            //navigate to share video page
-            () => {
-              window.location.href =
-                "/share-video?submissionId=" +
-                formData.uniqueId +
-                "&firstName=" +
-                formData.firstName +
-                "&lastName=" +
-                formData.lastName +
-                "&email=" +
-                formData.email;
-            }
-          }
-        >
-          Upload my video
-        </Button>
-      </section>
     </div>
   );
 }
@@ -127,6 +107,12 @@ function SummarySection() {
         the privacy policy box and sending the application.
       </p>
       <section className="flex flex-col gap-2">
+        <Label label="I agree for Sunstar affiliates and distributors to use my details for marketing purposes." />
+        <p className="text-pretty text-lg">
+          {formData.agreesForNomineeInformationToBeMarketed ? "Yes" : "No"}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
         <Label label="Country of residence" />
         <p className="text-pretty text-lg">{formData.country?.label}</p>
       </section>
@@ -157,6 +143,30 @@ function SummarySection() {
       <section className="flex flex-col gap-2">
         <Label label="For which category do you want to nominate yourself or your colleague" />
         <p className="text-pretty text-lg">{formData.category?.label}</p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How has the nominee assisted individual lives in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.howDidTheNomineeAssistedIndividualLives}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="How has the nominee made a positive impact in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.howDidTheNomineeMadePositiveImpact}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="What has been the nominee's greatest achievement in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.whatHasBeenTheNomineeGreatestAchievement}
+        </p>
+      </section>
+      <section className="flex flex-col gap-2">
+        <Label label="What is the nominee most proud of in the chosen category?" />
+        <p className="text-pretty text-lg">
+          {formData.whatIsTheNomineeMostProudOf}
+        </p>
       </section>
       <p>
         <span className="opacity-65">

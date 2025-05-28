@@ -28,6 +28,7 @@ export type categoryType = {
 export type FormData = {
   uniqueId: string;
   isNotFullTimeDentalEmployee: boolean;
+  agreesForNomineeInformationToBeMarketed: boolean;
   country: countryType | null;
   nominee: nomineeType;
   firstName: string;

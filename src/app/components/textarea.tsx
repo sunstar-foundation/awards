@@ -1,3 +1,4 @@
+import { countWords } from "@/helpers/form-validation";
 import { Label } from "./input";
 
 export function Textarea({
@@ -25,6 +26,7 @@ export function Textarea({
   //calc rows based on min and max
   const calculatedRows = Math.ceil((max - min) / 30); // Assuming 10 characters per row
   const adjustedRows = Math.max(rows, calculatedRows); // Ensure at least the default rows
+
   return (
     <div className="flex flex-col gap-2 w-full items-start">
       <Label label={label} required={required} />
@@ -37,8 +39,7 @@ export function Textarea({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           rows={adjustedRows}
-          minLength={min}
-          maxLength={max}
+          maxLength={countWords(value) >= max ? max : undefined}
         />
         <p className="text-sm text-gray-500">
           This question requires {min} words minimum to {max} words maximum.
