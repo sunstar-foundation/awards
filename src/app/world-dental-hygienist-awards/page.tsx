@@ -257,8 +257,9 @@ function CountrySection() {
         value={formData.country?.value || countries[0].value}
         options={countries}
       />
+   
       {formData.country?.value === "" || !formData.country ? null : formData
-          .country.edhf === true ? (
+          .country.edhf === true || formData.country.wdha === true ? (
         <div className="flex flex-col gap-4 w-full">
           <p>
             You cannot nominate directly for the SUNSTAR World Dental Hygienist

@@ -7,6 +7,7 @@ export type countryType = {
   value: string;
   label: string;
   edhf: boolean;
+  wdha?: boolean;
 };
 
 export type graduationType = {
