@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { nominee, country, firstName, lastName, addressLine, email, type } =
+  const { firstName, lastName, email, type } =
     req.body;
 
   try {

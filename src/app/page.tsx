@@ -1,6 +1,7 @@
 import { Container } from "./components/container";
 import { H1 } from "./components/typography";
 
+
 export default function Home() {
   return (
     <Container>
