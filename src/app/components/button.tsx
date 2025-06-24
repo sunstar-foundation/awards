@@ -41,7 +41,7 @@ export function Button({
   size,
   ...props
 }: ButtonProps) {
-  console.log(buttonStyles({ variant, size }));
+  
   return (
     <button
       type={type}

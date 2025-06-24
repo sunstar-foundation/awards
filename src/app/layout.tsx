@@ -4,6 +4,7 @@ import "./globals.css";
 import { FormProvider } from "./world-dental-hygienist-awards/wdha.context";
 import { FormProviderEDHF } from "./gum-edhf-award-of-distinction/edhf.context";
 import Script from "next/script";
+import ExternalScripts from "./components/external-scripts";
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -26,6 +27,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const adobeLaunchScript = process.env.NODE_ENV === "development"
+    ? "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-a46d93f0c752-development.min.js"
+    : "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-9e812df82057.min.js";
   return (
     <html lang="en">
       <head>
@@ -36,10 +41,15 @@ export default function RootLayout({
           async={true}
           strategy="afterInteractive"
         />
+        <Script
+          src={adobeLaunchScript}
+          async={true}
+        />
       </head>
       <body
         className={`${notoSans.variable} ${notoSansMono.variable} antialiased`}
       >
+        <ExternalScripts />
        
         <FormProviderEDHF>
           <FormProvider>{children}</FormProvider>
