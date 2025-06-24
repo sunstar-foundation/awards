@@ -41,13 +41,14 @@ export function Button({
   size,
   ...props
 }: ButtonProps) {
+  console.log(buttonStyles({ variant, size }));
   return (
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
-      className={cn(buttonStyles({ variant, size }), props.className)}
       {...props}
+      className={cn(buttonStyles({ variant, size }), props.className)}
+      disabled={disabled}
     >
       {children}
     </button>
