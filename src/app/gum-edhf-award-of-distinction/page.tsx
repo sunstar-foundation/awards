@@ -196,6 +196,7 @@ function SummarySection() {
         <Button
           onClick={handleSendEmail}
           disabled={!formData.acceptedPrivacyPolicy || pending}
+          className="edhf-button"
         >
           {pending ? "Sending..." : "Send"}
         </Button>

@@ -19,7 +19,6 @@ export const metadata: Metadata = {
   title: "Sunstar Foundation - Awards submission forms",
   description:
     "Welcome to the Sunstar Foundation Awards submission forms. Please select the appropriate form from the list below to begin your submission process. Each form is designed to gather specific information related to the respective award category. Ensure that you fill out all required fields accurately and completely.",
-
 };
 
 export default function RootLayout({

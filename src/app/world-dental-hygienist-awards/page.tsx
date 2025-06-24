@@ -230,6 +230,7 @@ function SummarySection() {
         <Button
           onClick={handleSendEmail}
           disabled={!formData.acceptedPrivacyPolicy || pending}
+          className="wdha-button"
         >
           {pending ? "Sending..." : "Send"}
         </Button>
