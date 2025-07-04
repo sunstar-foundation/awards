@@ -18,7 +18,7 @@ const defaultFormData = {
   isNotFullTimeDentalEmployee: false,
   agreesForNomineeInformationToBeMarketed: false,
   country: null,
-  nominee: { value: "", label: "" },
+  nominee: { value: "0", label: "Myself" },
   firstName: "",
   lastName: "",
   addressLine: "",
