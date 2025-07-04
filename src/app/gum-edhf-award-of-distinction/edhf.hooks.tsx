@@ -1,5 +1,6 @@
 "use client";
 
+import { Console } from "console";
 import { useFormContextEDHF } from "./edhf.context";
 import { countWords, isValidEmail } from "@/helpers/form-validation";
 
@@ -64,7 +65,6 @@ export function useFormFieldActions() {
     invalidEmail ||
     (!formData.country?.edhf && formData.isNotFullTimeDentalEmployee) ||
     !formData.agreesForNomineeInformationToBeMarketed ||
-    !formData.acceptedPrivacyPolicy ||
     !isValidhowDidTheNomineeAssistedIndividualLives ||
     !isValidhowDidTheNomineeMadePositiveImpact ||
     !isValidwhatHasBeenTheNomineeGreatestAchievement ||
