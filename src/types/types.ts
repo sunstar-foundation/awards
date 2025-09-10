@@ -36,6 +36,10 @@ export type FormData = {
   lastName: string;
   addressLine: string;
   email: string;
+  nomineeFirstName?: string;
+  nomineeLastName?: string;
+  nomineeAddressLine?: string;
+  nomineeEmail?: string;
   isCertifiedHygienist: boolean;
   graduation: graduationType | null;
   referal: referalType | null;

@@ -151,13 +151,7 @@ function SummarySection() {
         <p className="text-pretty text-lg">{formData.country?.label}</p>
       </section>
       <section className="flex flex-col gap-2">
-        <Label
-          label={
-            formData.nominee.value === "0"
-              ? "Your Information"
-              : "Your colleague information"
-          }
-        />
+        <Label label={"Your Information"} />
         <p className="text-pretty text-lg">
           {formData.firstName} {formData.lastName}
           <br></br>
@@ -166,6 +160,20 @@ function SummarySection() {
           {formData.email}
         </p>
       </section>
+
+      {formData.nominee.value === "1" && (
+        <section className="flex flex-col gap-2">
+          <Label label={"Your colleague's Information"} />
+          <p className="text-pretty text-lg">
+            {formData.nomineeFirstName} {formData.nomineeLastName}
+            <br></br>
+            {formData.nomineeAddressLine}
+            <br></br>
+            {formData.nomineeEmail}
+          </p>
+        </section>
+      )}
+
       <section className="flex flex-col gap-2">
         <Label label="How long ago did the nominee graduate from hygiene school" />
         <p className="text-pretty text-lg">{formData.graduation?.label}</p>
@@ -318,17 +326,17 @@ function NomineeSection() {
       />
 
       <Input
-        label="First name"
+        label={formData.nominee.value === "0" ? "First name" : "Your first name"}
         name="firstName"
         required={true}
         value={formData.firstName}
         onChange={(e) => updateField("firstName", e.target.value)}
         type="text"
-        placeholder=""
+        placeholder="Enter first name"
       />
 
       <Input
-        label="Last name"
+        label={formData.nominee.value === "0" ? "Last name" : "Your last name"}
         name="lastName"
         required={true}
         value={formData.lastName}
@@ -338,7 +346,7 @@ function NomineeSection() {
       />
 
       <Input
-        label="Address line"
+        label={formData.nominee.value === "0" ? "Address line" : "Your address line"}
         name="addressLine"
         required={true}
         value={formData.addressLine}
@@ -348,7 +356,7 @@ function NomineeSection() {
         note="Enter your full address line, including street address, city, and zip code."
       />
       <Input
-        label="Email address"
+        label={formData.nominee.value === "0" ? "Email address" : "Your email address"}
         name="email"
         required={true}
         type="email"
@@ -356,6 +364,54 @@ function NomineeSection() {
         onChange={(e) => updateField("email", e.target.value)}
         placeholder="Enter email address"
       />
+
+      {formData.nominee.value === "1" && (
+        <>
+        <h2 className="text-lg font-medium text-gray-700 text-pretty mt-4">
+          Please provide your colleague's information below:
+        </h2>
+          <Input
+            label="Nominee's first name"
+            name="nomineeFirstName"
+            required={true}
+            value={formData.nomineeFirstName!!}
+            onChange={(e) => updateField("nomineeFirstName", e.target.value)}
+            type="text"
+            placeholder="Enter nominee's first name"
+          />
+
+          <Input
+            label="Nominee's last name"
+            name="nomineeLastName"
+            required={true}
+            value={formData.nomineeLastName!!}
+            onChange={(e) => updateField("nomineeLastName", e.target.value)}
+            type="text"
+            placeholder="Enter nominee's last name"
+          />
+
+          <Input
+            label="Nominee's address line"
+            name="nomineeAddressLine"
+            required={true}
+            value={formData.nomineeAddressLine!!}
+            onChange={(e) => updateField("nomineeAddressLine", e.target.value)}
+            type="text"
+            placeholder="Ex: Route de Pallatex 11, 1163 Etoy"
+            note="Enter the nominee's full address line, including street address, city, and zip code."
+          />
+
+          <Input
+            label="Nominee's email address"
+            name="nomineeEmail"
+            required={true}
+            type="email"
+            value={formData.nomineeEmail!!}
+            onChange={(e) => updateField("nomineeEmail", e.target.value)}
+            placeholder="Enter nominee's email address"
+          />
+        </>
+      )}
 
       <Checkbox
         name="certified_hygienist"
