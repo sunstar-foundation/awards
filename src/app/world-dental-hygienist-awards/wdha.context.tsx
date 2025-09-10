@@ -14,7 +14,7 @@ type FormContextType = {
   resetForm: () => void;
 };
 
-const defaultFormData = {
+const defaultFormData: FormData = {
   uniqueId: uuidv4(),
   isNotFullTimeDentalEmployee: false,
   agreesForNomineeInformationToBeMarketed: false,
@@ -24,6 +24,10 @@ const defaultFormData = {
   lastName: "",
   addressLine: "",
   email: "",
+  nomineeFirstName: "",
+  nomineeLastName: "",
+  nomineeAddressLine: "",
+  nomineeEmail: "",
   isCertifiedHygienist: false,
   graduation: { value: 0, label: "" },
   referal: nomineeCategories[0],

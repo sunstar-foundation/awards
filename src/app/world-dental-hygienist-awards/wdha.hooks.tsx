@@ -1,26 +1,17 @@
 "use client";
 
 import { useFormContext } from "./wdha.context";
-import { countWords, isValidEmail } from "@/helpers/form-validation";
+import { countWords, isValidEmail, isValidFirstNameOrLastName } from "@/helpers/form-validation";
 
 export function useFormFieldActions() {
   const { formData } = useFormContext();
 
-  const invalidFirstname =
-    !formData.firstName ||
-    formData.firstName.trim().length < 2 ||
-    formData.firstName.trim().length > 50 ||
-    /\d/.test(formData.firstName) ||
-    !/^[a-zA-ZÀ-ÿ' -]+$/.test(formData.firstName);
-
-  const invalidLastname =
-    !formData.lastName ||
-    formData.lastName.trim().length < 2 ||
-    formData.lastName.trim().length > 50 ||
-    /\d/.test(formData.lastName) ||
-    !/^[a-zA-ZÀ-ÿ' -]+$/.test(formData.lastName);
-
+  const invalidFirstname = !isValidFirstNameOrLastName(formData.firstName);
+  const invalidNomineeFirstname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeFirstName!!);
+  const invalidLastname = !isValidFirstNameOrLastName(formData.lastName);
+  const invalidNomineeLastname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeLastName!!);
   const invalidEmail = !isValidEmail(formData.email);
+  const invalidNomineeEmail = formData.nominee.value === "1" && !isValidEmail(formData.nomineeEmail!!);
 
   const requiredFields = [
     formData.nominee?.value,
@@ -35,7 +26,13 @@ export function useFormFieldActions() {
     formData.howDidTheNomineeMadePositiveImpact,
     formData.whatHasBeenTheNomineeGreatestAchievement,
     formData.whatIsTheNomineeMostProudOf,
+    formData.nominee.value === "1" ? formData.nomineeFirstName : "filled",
+    formData.nominee.value === "1" ? formData.nomineeLastName : "filled",
+    formData.nominee.value === "1" ? formData.nomineeAddressLine : "filled",
+    formData.nominee.value === "1" ? formData.nomineeEmail : "filled",
   ];
+
+
 
   const isValidhowDidTheNomineeAssistedIndividualLives = (() => {
     const count = countWords(formData.howDidTheNomineeAssistedIndividualLives);
@@ -67,7 +64,8 @@ export function useFormFieldActions() {
     !isValidhowDidTheNomineeAssistedIndividualLives ||
     !isValidhowDidTheNomineeMadePositiveImpact ||
     !isValidwhatHasBeenTheNomineeGreatestAchievement ||
-    !isValidwhatIsTheNomineeMostProudOf;
+    !isValidwhatIsTheNomineeMostProudOf ||
+    (formData.nominee.value === "1" && (invalidNomineeFirstname || invalidNomineeLastname || invalidNomineeEmail));
 
   return {
     isDisabled,

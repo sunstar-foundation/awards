@@ -24,3 +24,13 @@ export function countWords(text: string): number {
     .split(/\s+/) // Split on one or more whitespace characters
     .filter((word) => word.length > 0).length; // Filter out empty strings
 }
+
+export function isValidFirstNameOrLastName(name: string): boolean {
+  return (
+    !!name &&
+    name.trim().length >= 2 &&
+    name.trim().length <= 50 &&
+    !/\d/.test(name) &&
+    /^[a-zA-ZÀ-ÿ' -]+$/.test(name)
+  );
+}

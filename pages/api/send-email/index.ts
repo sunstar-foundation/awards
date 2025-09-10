@@ -12,7 +12,7 @@ export default async function handler(
     await sendEmail({
       from: process.env.DEFAULT_FROM_EMAIL,
       to: [email],
-      subject: `${type} Nomination Form - ${req.body.firstName} ${req.body.lastName}`,
+      subject: `${type} Nomination Form - ${req.body.nominee.value === "1" ? req.body.nomineeFirstName : req.body.firstName} ${req.body.nominee.value === "1" ? req.body.nomineeLastName : req.body.lastName}`,
       html: `
         <div style="max-width:600px; margin:0 auto; padding:24px; font-family:Arial, sans-serif; font-size:14px; color:#333; background:#fff; border:1px solid #ddd; border-radius:8px;">
           <h2 style="font-size:20px; margin-bottom:20px; color:#111;">${type} Nomination Form</h2>
@@ -31,10 +31,17 @@ export default async function handler(
           <p><strong>Email:</strong> ${req.body.email}</p>
 
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+          ${req.body.nominee.value === "1" ? `
+            <p><strong>Nominee First Name:</strong> ${req.body.nomineeFirstName}</p>
+            <p><strong>Nominee Last Name:</strong> ${req.body.nomineeLastName}</p>
+            <p><strong>Nominee Address Line:</strong> ${req.body.nomineeAddressLine}</p>
+            <p><strong>Nominee Email:</strong> ${req.body.nomineeEmail}</p>
+             <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+          ` : ""}
 
           <p><strong>Is Certified Hygienist:</strong> ${req.body.isCertifiedHygienist === true ? "Yes" : "No"}</p>
           <p><strong>Graduation:</strong> ${req.body.graduation?.label}</p>
-          <p><strong>Referral:</strong> ${req.body.referral?.label}</p>
+          <p><strong>Referral:</strong> ${req.body.referal?.label}</p>
           <p><strong>Category:</strong> ${req.body.category?.label}</p>
 
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
@@ -57,16 +64,22 @@ export default async function handler(
       await sendEmail({
         from: process.env.DEFAULT_FROM_EMAIL,
         to: [email],
-        subject: `Shared Video Link for your Nomination - ${firstName} ${lastName}`,
+        subject: `${req.body.nominee.value === "1" ? `Shared Video Link for the Nomination of ${req.body.nomineeFirstName} ${req.body.nomineeLastName}` : "Shared Video Link for your Nomination"} - ${firstName} ${lastName}`,
         html: `
           <div style="max-width:600px; margin:0 auto; padding:24px; font-family:Arial, sans-serif; font-size:14px; color:#333; background:#fff; border:1px solid #ddd; border-radius:8px;">
-            <h2 style="font-size:20px; margin-bottom:16px; color:#111;">Shared Video Link for your Nomination</h2>
+            <h2 style="font-size:20px; margin-bottom:16px; color:#111;">${req.body.nominee.value === "1" ? `Shared Video Link for the Nomination of ${req.body.nomineeFirstName} ${req.body.nomineeLastName}` : "Shared Video Link for your Nomination"}</h2>
 
             <p>Hello <strong>${firstName} ${lastName}</strong>,</p>
-
-            <p>Thank you for your nomination.</p>
-
-            <p>Part of your nomination is a 1-minute video, in which you further explain your nomination. We would like to ask you to share this video with us, using the link below. Thank you!</p>
+            ${req.body.nominee.value === "1" ? `<p>Thank you for nominating <strong>${req.body.nomineeFirstName} ${req.body.nomineeLastName}</strong></p>` : ` <p>Thank you for your nomination.</p>`}
+            
+            ${req.body.nominee.value === "1" ? 
+              ` Part of the nomination is a 1-minute video, in which the nominee further explains their nomination.  
+              We would like to ask the nominee to share this video with us, using the link below. Thank you!` 
+              : 
+              `<p>
+              Part of your nomination is a 1-minute video, in which you further explain your nomination. We would like to ask you to share this video with us, using the link below. Thank you!
+              </p>`
+            }
 
             <p>Please click the button below to upload or share your video with us:</p>
 
