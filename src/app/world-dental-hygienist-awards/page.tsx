@@ -21,7 +21,7 @@ import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
 
 export default function Home() {
-  const isFormClosed = new Date() > new Date("2026-01-15T23:59:59+02:00");
+  const isFormClosed = new Date() > new Date("2026-01-15T23:59:59+01:00");
   if (isFormClosed) {
     if (typeof window !== "undefined") {
       window.location.href = "/";
