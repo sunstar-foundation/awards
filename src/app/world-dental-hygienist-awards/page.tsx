@@ -21,6 +21,13 @@ import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
 
 export default function Home() {
+  const isFormClosed = new Date() > new Date("2026-01-15T23:59:59+02:00");
+  if (isFormClosed) {
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+  }
+
   const { formData, updateField, steps } = useFormContext();
 
   return (
@@ -309,6 +316,8 @@ function NomineeSection() {
   const { formData, updateField, setSteps } = useFormContext();
   const { isDisabled } = useFormFieldActions();
 
+  const NOMINEE_IS_COLLEAGUE = formData.nominee.value === "1";
+
   return (
     <>
       <RadioGroup
@@ -356,7 +365,7 @@ function NomineeSection() {
         note="Enter your full address line, including street address, city, and zip code."
       />
       <Input
-        label={formData.nominee.value === "0" ? "Email address" : "Your email address"}
+        label={NOMINEE_IS_COLLEAGUE ? "Your email address" : "Email address"}
         name="email"
         required={true}
         type="email"
@@ -365,7 +374,7 @@ function NomineeSection() {
         placeholder="Enter email address"
       />
 
-      {formData.nominee.value === "1" && (
+      {NOMINEE_IS_COLLEAGUE && (
         <>
         <h2 className="text-lg font-medium text-gray-700 text-pretty mt-4">
           Please provide your colleague's information below:
