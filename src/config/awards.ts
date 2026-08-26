@@ -2,10 +2,12 @@ export const WDHA_DEADLINE = "2026-01-15T23:59:59+02:00";
 export const EDHF_DEADLINE = "2027-09-15T23:59:59+02:00";
 
 export function isAwardClosed(deadline: string | Date) {
-  // Allow exploring forms in development or when a public override is set
+  // Allow exploring forms in development, or when a public override is set
+  // AND the site is being built as a Vercel preview (prevents accidental prod exposure)
   if (
     process.env.NODE_ENV === "development" ||
-    process.env.NEXT_PUBLIC_AWARDS_OPEN_OVERRIDE === "true"
+    (process.env.NEXT_PUBLIC_AWARDS_OPEN_OVERRIDE === "true" &&
+      process.env.VERCEL_ENV === "preview")
   ) {
     return false;
   }
