@@ -22,7 +22,7 @@ import Image from "next/image";
 
 export default function Home() {
 
-  const isFormClosed = new Date() > new Date("2025-09-15T23:59:59+02:00");
+  const isFormClosed = new Date() > new Date("2027-09-15T23:59:59+02:00");
   if (isFormClosed) {
     if (typeof window !== "undefined") {
       window.location.href = "/";
