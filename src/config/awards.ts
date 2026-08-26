@@ -2,8 +2,11 @@ export const WDHA_DEADLINE = "2026-01-15T23:59:59+02:00";
 export const EDHF_DEADLINE = "2027-09-15T23:59:59+02:00";
 
 export function isAwardClosed(deadline: string | Date) {
-  // In development allow exploring forms regardless of deadlines
-  if (process.env.NODE_ENV === "development") {
+  // Allow exploring forms in development or when a public override is set
+  if (
+    process.env.NODE_ENV === "development" ||
+    process.env.NEXT_PUBLIC_AWARDS_OPEN_OVERRIDE === "true"
+  ) {
     return false;
   }
   try {
