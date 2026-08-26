@@ -1,23 +1,18 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals.js";
-import nextTs from "eslint-config-next/typescript.js";
+import { defineConfig } from "eslint/config";
 
-const _nextVitals = Array.isArray(nextVitals) ? nextVitals : [nextVitals];
-const _nextTs = Array.isArray(nextTs) ? nextTs : [nextTs];
-
-const eslintConfig = defineConfig([
-  ..._nextVitals,
-  ..._nextTs,
+export default defineConfig([
   {
+    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
+  },
+  {
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
     rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-extra-non-null-assertion": "off",
+      "no-unused-vars": "warn",
       "react/no-unescaped-entities": "off",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);
-
-export default eslintConfig;
