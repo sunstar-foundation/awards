@@ -10,7 +10,7 @@ type FormContextType = {
   formData: FormData;
   steps: number;
   setSteps: (steps: number) => void;
-  updateField: (field: string, value: any) => void;
+  updateField: (field: string, value: unknown) => void;
   resetForm: () => void;
 };
 
@@ -59,7 +59,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData));
   }, [formData]);
 
-  const updateField = (field: string, value: any) => {
+  const updateField = (field: string, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

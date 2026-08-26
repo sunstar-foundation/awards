@@ -7,11 +7,11 @@ export function useFormFieldActions() {
   const { formData } = useFormContextEDHF();
 
   const invalidFirstname = !isValidFirstNameOrLastName(formData.firstName);
-  const invalidNomineeFirstname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeFirstName!!);
+  const invalidNomineeFirstname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeFirstName ?? "");
   const invalidLastname = !isValidFirstNameOrLastName(formData.lastName);
-  const invalidNomineeLastname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeLastName!!);
+  const invalidNomineeLastname = formData.nominee.value === "1" && !isValidFirstNameOrLastName(formData.nomineeLastName ?? "");
   const invalidEmail = !isValidEmail(formData.email);
-  const invalidNomineeEmail = formData.nominee.value === "1" && !isValidEmail(formData.nomineeEmail!!);
+  const invalidNomineeEmail = formData.nominee.value === "1" && !isValidEmail(formData.nomineeEmail ?? "");
 
   const requiredFields = [
     formData.nominee?.value,

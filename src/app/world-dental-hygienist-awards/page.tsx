@@ -383,7 +383,7 @@ function NomineeSection() {
             label="Nominee's first name"
             name="nomineeFirstName"
             required={true}
-            value={formData.nomineeFirstName!!}
+            value={formData.nomineeFirstName ?? ""}
             onChange={(e) => updateField("nomineeFirstName", e.target.value)}
             type="text"
             placeholder="Enter nominee's first name"
@@ -393,7 +393,7 @@ function NomineeSection() {
             label="Nominee's last name"
             name="nomineeLastName"
             required={true}
-            value={formData.nomineeLastName!!}
+            value={formData.nomineeLastName ?? ""}
             onChange={(e) => updateField("nomineeLastName", e.target.value)}
             type="text"
             placeholder="Enter nominee's last name"
@@ -403,7 +403,7 @@ function NomineeSection() {
             label="Nominee's address line"
             name="nomineeAddressLine"
             required={true}
-            value={formData.nomineeAddressLine!!}
+            value={formData.nomineeAddressLine ?? ""}
             onChange={(e) => updateField("nomineeAddressLine", e.target.value)}
             type="text"
             placeholder="Ex: Route de Pallatex 11, 1163 Etoy"
@@ -415,7 +415,7 @@ function NomineeSection() {
             name="nomineeEmail"
             required={true}
             type="email"
-            value={formData.nomineeEmail!!}
+            value={formData.nomineeEmail ?? ""}
             onChange={(e) => updateField("nomineeEmail", e.target.value)}
             placeholder="Enter nominee's email address"
           />
