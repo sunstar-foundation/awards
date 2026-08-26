@@ -1,6 +1,6 @@
 "use client";
 
-import { nomineeCategories } from "@/data/data";
+import { nomineeCategories, refereeOptionsWDHA } from "@/data/data";
 import { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -30,7 +30,7 @@ const defaultFormData: FormData = {
   nomineeEmail: "",
   isCertifiedHygienist: false,
   graduation: { value: 0, label: "" },
-  referal: nomineeCategories[0],
+  referal: refereeOptionsWDHA[0],
   category: null,
   howDidTheNomineeAssistedIndividualLives: "",
   howDidTheNomineeMadePositiveImpact: "",
@@ -50,7 +50,34 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const stored = localStorage.getItem(FORM_STORAGE_KEY);
     if (stored) {
-      setFormData(JSON.parse(stored));
+      try {
+        const parsed = JSON.parse(stored);
+
+        // Migrate referal if it's present but not a valid referee option
+        try {
+          const savedReferal = parsed.referal;
+          let savedValue: string | null = null;
+          if (savedReferal == null) {
+            savedValue = null;
+          } else if (typeof savedReferal === "string") {
+            savedValue = savedReferal;
+          } else if (typeof savedReferal === "object") {
+            savedValue = savedReferal.value ?? null;
+          }
+
+          const matched = refereeOptionsWDHA.find((opt) => opt.value === savedValue);
+          if (!matched) {
+            parsed.referal = refereeOptionsWDHA[0];
+          }
+        } catch {
+          // If unexpected shape, fallback to default but preserve other fields
+          parsed.referal = refereeOptionsWDHA[0];
+        }
+
+        setFormData(parsed);
+      } catch {
+        // Malformed JSON: ignore and keep defaults
+      }
     }
   }, []);
 

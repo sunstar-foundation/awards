@@ -1,7 +1,9 @@
 "use client";
+import { EDHF_DEADLINE, isAwardClosed } from "@/config/awards";
+
 export function EdhfLink() {
-    // return a message saying the form is closed if the date is past 15th of september 2025 23:59 CEST
-    const isFormClosed = new Date() > new Date("2025-09-15T23:59:59+02:00");
+    // return a message saying the form is closed if the date is past the EDHF deadline
+    const isFormClosed = isAwardClosed(EDHF_DEADLINE);
     if (isFormClosed) {
         return <p className="border border-gray-500 px-2 py-1">The GUM EDHF Award of Distinction form is closed.</p>;
     }

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { nomineeCategories } from "../../data/data";
+import { nomineeCategories, refereeOptionsEDHF } from "../../data/data";
 import { FormData } from "@/types/types";
 
 type FormContextType = {
@@ -29,7 +29,7 @@ const defaultFormData = {
   nomineeEmail: "",
   isCertifiedHygienist: false,
   graduation: { value: 0, label: "" },
-  referal: nomineeCategories[0],
+  referal: refereeOptionsEDHF[0],
   category: null,
   howDidTheNomineeAssistedIndividualLives: "",
   howDidTheNomineeMadePositiveImpact: "",
@@ -53,7 +53,33 @@ export const FormProviderEDHF = ({
   useEffect(() => {
     const stored = localStorage.getItem(FORM_STORAGE_KEY);
     if (stored) {
-      setFormData(JSON.parse(stored));
+      try {
+        const parsed = JSON.parse(stored);
+
+        // Migrate referal if it's present but not a valid referee option
+        try {
+          const savedReferal = parsed.referal;
+          let savedValue: string | null = null;
+          if (savedReferal == null) {
+            savedValue = null;
+          } else if (typeof savedReferal === "string") {
+            savedValue = savedReferal;
+          } else if (typeof savedReferal === "object") {
+            savedValue = savedReferal.value ?? null;
+          }
+
+          const matched = refereeOptionsEDHF.find((opt) => opt.value === savedValue);
+          if (!matched) {
+            parsed.referal = refereeOptionsEDHF[0];
+          }
+        } catch {
+          parsed.referal = refereeOptionsEDHF[0];
+        }
+
+        setFormData(parsed);
+      } catch {
+        // Malformed JSON: ignore and keep defaults
+      }
     }
   }, []);
 
