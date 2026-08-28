@@ -19,10 +19,11 @@ import { ErrorText, H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./edhf.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
+import { EDHF_DEADLINE, isAwardClosed } from "@/config/awards";
 
 export default function Home() {
 
-  const isFormClosed = new Date() > new Date("2025-09-15T23:59:59+02:00");
+  const isFormClosed = isAwardClosed(EDHF_DEADLINE);
   if (isFormClosed) {
     if (typeof window !== "undefined") {
       window.location.href = "/";

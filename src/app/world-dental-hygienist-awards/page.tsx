@@ -19,9 +19,10 @@ import { ErrorText, H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./wdha.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
+import { WDHA_DEADLINE, isAwardClosed } from "@/config/awards";
 
 export default function Home() {
-  const isFormClosed = new Date() > new Date("2026-01-15T23:59:59+02:00");
+  const isFormClosed = isAwardClosed(WDHA_DEADLINE);
   if (isFormClosed) {
     if (typeof window !== "undefined") {
       window.location.href = "/";
