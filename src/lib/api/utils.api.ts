@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const BASE_URL = process.env.NEXT_PUBLIC_DOMAIN;
+const BASE_URL = process.env.NEXT_PUBLIC_DOMAIN?.replace(/\/$/, "") || "";
 const API_URL = `${BASE_URL}/api`;
 
 type APISuccessResponse<T> = {
@@ -24,9 +24,21 @@ type ApiResponse<T> = APISuccessResponse<T> | APIErrorResponse;
 export const useApi = () => {
   const [pending, setPending] = useState(false);
 
+  const parseResponse = async (request: Response) => {
+    const contentType = request.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      return request.json();
+    }
+
+    return {
+      error: true,
+      message: `Request failed with status ${request.status}`,
+    };
+  };
+
   const post = async <T>(
     endpoint: string,
-    data: unknown
+    data: unknown,
   ): Promise<ApiResponse<T>> => {
     setPending(true);
     const url = `${API_URL}/${endpoint}`;
@@ -38,7 +50,7 @@ export const useApi = () => {
         },
         body: JSON.stringify(data),
       });
-      const response = await request.json();
+      const response = await parseResponse(request);
 
       setPending(false);
 
@@ -71,11 +83,11 @@ export const useApi = () => {
 
   const get = async <T>(
     endpoint: string,
-    params: Record<string, string | number> = {}
+    params: Record<string, string | number> = {},
   ): Promise<ApiResponse<T>> => {
     setPending(true);
     const queryString = new URLSearchParams(
-      params as Record<string, string>
+      params as Record<string, string>,
     ).toString();
     const url = `${API_URL}/${endpoint}${queryString ? `?${queryString}` : ""}`;
     try {
@@ -85,7 +97,7 @@ export const useApi = () => {
           "Content-Type": "application/json",
         },
       });
-      const response = await request.json();
+      const response = await parseResponse(request);
 
       setPending(false);
 
@@ -118,7 +130,7 @@ export const useApi = () => {
 
   const del = async <T>(
     endpoint: string,
-    data: unknown
+    data: unknown,
   ): Promise<ApiResponse<T>> => {
     setPending(true);
     const url = `${API_URL}/${endpoint}`;
@@ -130,7 +142,7 @@ export const useApi = () => {
         },
         body: JSON.stringify(data),
       });
-      const response = await request.json();
+      const response = await parseResponse(request);
 
       setPending(false);
 
@@ -163,7 +175,7 @@ export const useApi = () => {
 
   const patch = async <T>(
     endpoint: string,
-    data: unknown
+    data: unknown,
   ): Promise<ApiResponse<T>> => {
     setPending(true);
     const url = `${API_URL}/${endpoint}`;
@@ -175,7 +187,7 @@ export const useApi = () => {
         },
         body: JSON.stringify(data),
       });
-      const response = await request.json();
+      const response = await parseResponse(request);
 
       setPending(false);
 

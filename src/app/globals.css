@@ -15,8 +15,8 @@
   --color-bluecolor: var(--bluecolor);
   --color-lightgray: var(--lightgray);
 
-  --font-sans: var(--font-noto-sans);
-  --font-mono: var(--font-noto-sans-mono);
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
 }
 
 body {
