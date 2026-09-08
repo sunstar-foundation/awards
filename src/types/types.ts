@@ -26,6 +26,13 @@ export type categoryType = {
   description: string;
 };
 
+export type cvFileType = {
+  fileName: string;
+  contentType: string;
+  content: string;
+  size: number;
+};
+
 export type FormData = {
   uniqueId: string;
   isNotFullTimeDentalEmployee: boolean;
@@ -48,5 +55,6 @@ export type FormData = {
   howDidTheNomineeMadePositiveImpact: string;
   whatHasBeenTheNomineeGreatestAchievement: string;
   whatIsTheNomineeMostProudOf: string;
+  cv?: cvFileType | null;
   acceptedPrivacyPolicy: boolean;
 };

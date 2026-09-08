@@ -35,6 +35,7 @@ const defaultFormData = {
   howDidTheNomineeMadePositiveImpact: "",
   whatHasBeenTheNomineeGreatestAchievement: "",
   whatIsTheNomineeMostProudOf: "",
+  cv: null,
   acceptedPrivacyPolicy: false,
 };
 
@@ -68,7 +69,9 @@ export const FormProviderEDHF = ({
             savedValue = savedReferal.value ?? null;
           }
 
-          const matched = refereeOptionsEDHF.find((opt) => opt.value === savedValue);
+          const matched = refereeOptionsEDHF.find(
+            (opt) => opt.value === savedValue,
+          );
           if (!matched) {
             parsed.referal = refereeOptionsEDHF[0];
           }
@@ -76,6 +79,7 @@ export const FormProviderEDHF = ({
           parsed.referal = refereeOptionsEDHF[0];
         }
 
+        parsed.cv = null;
         setFormData(parsed);
       } catch {
         // Malformed JSON: ignore and keep defaults
@@ -85,7 +89,10 @@ export const FormProviderEDHF = ({
 
   // Save to localStorage on data change
   useEffect(() => {
-    localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData));
+    localStorage.setItem(
+      FORM_STORAGE_KEY,
+      JSON.stringify({ ...formData, cv: null }),
+    );
   }, [formData]);
 
   const updateField = (field: string, value: any) => {

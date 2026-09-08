@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Noto_Sans, Noto_Sans_Mono } from "next/font/google";
 import "./globals.css";
 import { FormProvider } from "./world-dental-hygienist-awards/wdha.context";
 import { FormProviderEDHF } from "./gum-edhf-award-of-distinction/edhf.context";
 import Script from "next/script";
 import ExternalScripts from "./components/external-scripts";
-
-const notoSans = Noto_Sans({
-  variable: "--font-noto-sans",
-  subsets: ["latin"],
-});
-
-const notoSansMono = Noto_Sans_Mono({
-  variable: "--font-noto-sans-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Sunstar Foundation - Awards submission forms",
@@ -27,30 +16,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const adobeLaunchScript = process.env.NODE_ENV === "development"
-    ? "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-a46d93f0c752-development.min.js"
-    : "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-9e812df82057.min.js";
+  const adobeLaunchScript =
+    process.env.NODE_ENV === "development"
+      ? "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-a46d93f0c752-development.min.js"
+      : "https://assets.adobedtm.com/467469cdd595/f9651373cafd/launch-9e812df82057.min.js";
   return (
     <html lang="en">
       <head>
-         <Script
+        <Script
           id="usercentrics-cmp"
           src="https://app.usercentrics.eu/browser-ui/latest/loader.js"
           data-settings-id="_2XSaYDrpo"
           async={true}
           strategy="afterInteractive"
         />
-        <Script
-          src={adobeLaunchScript}
-          async={true}
-        />
+        <Script src={adobeLaunchScript} async={true} />
       </head>
-      <body
-        className={`${notoSans.variable} ${notoSansMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <ExternalScripts />
-       
+
         <FormProviderEDHF>
           <FormProvider>{children}</FormProvider>
         </FormProviderEDHF>

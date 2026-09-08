@@ -37,7 +37,7 @@ export function Textarea({
 
   return (
     <div className="flex flex-col gap-2 w-full items-start">
-      <Label label={label} required={required} />
+      {label && <Label label={label} required={required} />}
       <div className="flex flex-col gap-2 w-full items-start ">
         <div className="relative w-full">
           <textarea
