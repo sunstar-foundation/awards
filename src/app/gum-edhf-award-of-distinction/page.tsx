@@ -130,7 +130,9 @@ function SummarySection() {
   const { sendEmail, pending } = useSendEmail();
   const [error, setError] = useState<string | null>(null);
   async function handleSendEmail() {
-    if (formData.acceptedPrivacyPolicy) {
+    if (!formData.cv?.content) {
+      setError("Please upload your CV before sending the application.");
+    } else if (formData.acceptedPrivacyPolicy) {
       const { error, message } = await sendEmail({
         ...formData,
         type: "EDHF",
@@ -252,7 +254,7 @@ function SummarySection() {
         </Button>
         <Button
           onClick={handleSendEmail}
-          disabled={!formData.acceptedPrivacyPolicy || pending}
+          disabled={!formData.cv?.content || !formData.acceptedPrivacyPolicy || pending}
           className="edhf-button"
         >
           {pending ? "Sending..." : "Send"}
@@ -315,16 +317,17 @@ function CvUploadSection() {
 
   return (
     <section className="flex flex-col gap-2 w-full">
-      <Label label="Curriculum Vitae (CV)" />
+      <Label label="Curriculum Vitae (CV)" required={true} />
       <div className="flex flex-col gap-2 w-full items-start">
         <input
           type="file"
           accept={CV_FILE_ACCEPT}
+          required
           onChange={handleCvChange}
           className="block w-full py-2 px-3 border border-transparent bg-lightgray focus:bg-white focus:border-gray-300"
         />
         <p className="text-sm text-gray-500">
-          Optional. Accepted formats: PDF, DOC, DOCX. Maximum file size: 10 MB.
+          Required. Accepted formats: PDF, DOC, DOCX. Maximum file size: 10 MB.
         </p>
         {formData.cv && (
           <p className="text-sm text-gray-700">
