@@ -15,6 +15,14 @@ export default async function handler(
 ) {
   const { firstName, lastName, email, type } = req.body;
   const cv = type === "EDHF" ? req.body.cv : null;
+
+  if (type === "EDHF" && !cv?.content) {
+    return res.status(400).json({
+      message: "Please upload your CV before sending the application.",
+      error: true,
+    });
+  }
+
   const attachments = cv?.content
     ? [
         {
