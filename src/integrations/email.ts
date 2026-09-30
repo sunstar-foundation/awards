@@ -30,7 +30,6 @@ export async function sendEmail({
     to: to,
     bcc: [
       "martijn.verhulst@sunstar.com",
-      "valentine.onah@sunstar.com",
       "marga.ortiz@sunstar.com",
     ],
     subject: `${subject}`,
