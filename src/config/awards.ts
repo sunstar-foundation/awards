@@ -1,6 +1,7 @@
 // Extended WDHA deadline to reopen the form for preview testing
 export const WDHA_DEADLINE = "2027-01-15T23:59:59+02:00";
 export const EDHF_DEADLINE = "2027-09-15T23:59:59+02:00";
+export const EDHF_FORM_ENABLED = false;
 
 export function isAwardClosed(deadline: string | Date) {
   // Allow exploring forms in development, or when a public override is set

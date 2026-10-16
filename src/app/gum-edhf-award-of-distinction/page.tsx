@@ -19,7 +19,7 @@ import { ErrorText, H1, Link } from "../components/typography";
 import { useFormFieldActions } from "./edhf.hooks";
 import { useSendEmail } from "@/lib/api/client/send-email.api";
 import Image from "next/image";
-import { EDHF_DEADLINE, isAwardClosed } from "@/config/awards";
+import { EDHF_DEADLINE, EDHF_FORM_ENABLED, isAwardClosed } from "@/config/awards";
 
 const EDHF_APPLICATION_QUESTIONS = {
   individualImpact: {
@@ -57,7 +57,7 @@ const CV_FILE_ACCEPT =
   ".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 export default function Home() {
-  const isFormClosed = isAwardClosed(EDHF_DEADLINE);
+  const isFormClosed = !EDHF_FORM_ENABLED || isAwardClosed(EDHF_DEADLINE);
   if (isFormClosed) {
     if (typeof window !== "undefined") {
       window.location.href = "/";

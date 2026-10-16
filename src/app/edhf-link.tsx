@@ -1,11 +1,20 @@
 "use client";
-import { EDHF_DEADLINE, isAwardClosed } from "@/config/awards";
+import { EDHF_DEADLINE, EDHF_FORM_ENABLED, isAwardClosed } from "@/config/awards";
 
 export function EdhfLink() {
     // return a message saying the form is closed if the date is past the EDHF deadline
-    const isFormClosed = isAwardClosed(EDHF_DEADLINE);
+    const isFormClosed = !EDHF_FORM_ENABLED || isAwardClosed(EDHF_DEADLINE);
     if (isFormClosed) {
-        return <p className="border border-gray-500 px-2 py-1">The GUM EDHF Award of Distinction form is closed.</p>;
+        return (
+            <button
+                className="px-4 py-2 text-white bg-bluecolor min-w-[150px] cursor-default opacity-50"
+                disabled
+                type="button"
+                aria-disabled="true"
+            >
+                GUM EDHF Award of Distinction
+            </button>
+        );
     }
     return (
         <a href="/gum-edhf-award-of-distinction">
